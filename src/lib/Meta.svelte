@@ -6,7 +6,7 @@
   let modes = [`Spell`, `Unpredicable`, `Stable`, `Imbue`];
 </script>
 
-<div>
+<div class="w-96">
   <h2 class="text-xl">1. Meta</h2>
 
   <div>

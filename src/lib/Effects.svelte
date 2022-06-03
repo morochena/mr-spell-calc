@@ -34,7 +34,7 @@
   <form on:submit|preventDefault={handleSubmit}>
     <select
       bind:value={selectedEffect}
-      class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      class="mt-1 block w-96 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
     >
       {#each availableEffects as effect}
         <option value={effect} disabled={!effect.domains.includes($selectedDomain)}>
@@ -69,7 +69,10 @@
           <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{effect.name}</td>
           <td>
             {#if effect.hasTiers}
-              <select bind:value={effect.tier}>
+              <select
+                bind:value={effect.tier}
+                class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              >
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
