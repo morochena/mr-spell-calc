@@ -140,7 +140,7 @@
           <td>{modifier.name}</td>
           <td>{calculateCostText(modifier)}</td>
           <td>{modifier.tier}</td>
-          <td />
+          <td>{modifier.description}</td>
           <td>{modifier.notes}</td>
         </tr>
       {/each}
