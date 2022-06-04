@@ -10,9 +10,13 @@
   };
 </script>
 
-<div class="w-96">
-  <button on:click={reset}>Reset All</button>
+<button
+  on:click={reset}
+  class="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 justify-self-end"
+  >Reset All</button
+>
 
+<div class="w-96">
   <h2 class="text-xl">1. Meta</h2>
 
   <div>
@@ -20,7 +24,7 @@
     <input
       id="name"
       type="text"
-      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+      class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md"
       bind:value={$name}
       placeholder="spell name"
     />
@@ -29,7 +33,7 @@
     <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
     <textarea
       id="description"
-      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+      class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md"
       bind:value={$description}
       placeholder="spell description"
     />
@@ -38,7 +42,7 @@
     <label for="domain" class="block text-sm font-medium text-gray-700">Domain</label>
     <select
       bind:value={$selectedDomain}
-      class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
     >
       {#each domains as domain}
         <option value={domain}>
@@ -52,7 +56,7 @@
     <label for="mode" class="block text-sm font-medium text-gray-700">Mode</label>
     <select
       bind:value={$selectedMode}
-      class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
     >
       {#each modes as mode}
         <option value={mode}>

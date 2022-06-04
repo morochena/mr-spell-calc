@@ -23,7 +23,7 @@
   <form on:submit|preventDefault={handleSubmit}>
     <select
       bind:value={selectedModifier}
-      class="mt-1 block w-96 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      class="mt-1 block w-96 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
     >
       {#each availableModifiers as modifier}
         <option value={modifier}>
@@ -38,7 +38,7 @@
     <button
       disabled={!selectedModifier}
       type="submit"
-      class="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      class="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-900 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
     >
       Add Modifier
     </button>
@@ -61,7 +61,7 @@
             {#if modifier.hasTiers}
               <select
                 bind:value={modifier.tier}
-                class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
               >
                 {#each range(1, 50, 1) as i}
                   <option value={i}>{i}</option>
@@ -72,7 +72,7 @@
           <td>
             <textarea
               bind:value={modifier.notes}
-              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="notes"
             />
           </td>
