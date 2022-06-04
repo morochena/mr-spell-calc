@@ -1,4 +1,5 @@
 
-import { writable } from 'svelte/store';
+import { persistedStore } from './persistedStore';
 
-export const selectedEffects = writable([]);
+// @ts-ignore
+export const selectedEffects = persistedStore("selectedEffects", [])

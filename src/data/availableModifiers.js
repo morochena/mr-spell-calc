@@ -1,5 +1,5 @@
 
-const splitModifier = (tier) => {
+export const splitModifier = (tier) => {
   if (tier == 1) return 8;
   if (tier == 2) return 15;
   if (tier == 3) return 27;
@@ -7,7 +7,7 @@ const splitModifier = (tier) => {
   if (tier > 4) return tier * 10;
 }
 
-const rangeModifier = (tier) => {
+export const rangeModifier = (tier) => {
   let cost = 0
 
   for (let i = 0; i < tier; i++) {
@@ -23,7 +23,7 @@ const rangeModifier = (tier) => {
   return cost;
 }
 
-const aoeModifier = (tier) => {
+export const aoeModifier = (tier) => {
   let cost = 0;
 
   for (let i = 0; i < tier; i++) {
@@ -41,7 +41,7 @@ const aoeModifier = (tier) => {
   return cost;
 }
 
-const lastingModifier = (tier, type = null) => {
+export const lastingModifier = (tier, type = null) => {
   let cost = 0
   let multiplier = 0
 
@@ -69,7 +69,7 @@ const lastingModifier = (tier, type = null) => {
   return [cost, multiplier];
 }
 
-const componentModifier = (tier) => {
+export const componentModifier = (tier) => {
   let cost = 0;
 
   for (let i = 0; i < tier; i++) {
@@ -90,15 +90,15 @@ export const availableModifiers = [
   { name: "Painful", hasTiers: false, modifierType: 'reduce', modifier: 6 },
   { name: "Stealth", hasTiers: false, modifierType: 'add', modifier: 1 },
   { name: "Somatic", hasTiers: false, modifierType: 'reduce', modifier: 3 },
-  { name: "Split", hasTiers: true, modifierType: 'function', modifier: splitModifier },
-  { name: "Range", hasTiers: true, modifierType: 'function', modifier: rangeModifier },
+  { name: "Split", hasTiers: true, modifierType: 'function', modifier: "splitModifier" },
+  { name: "Range", hasTiers: true, modifierType: 'function', modifier: "rangeModifier" },
   { name: "Trigger Action", hasTiers: false, modifierType: 'multiply', modifier: 0.5 },
   { name: "Thwarted By", hasTiers: false, modifierType: 'multiply', modifier: 0.667 },
-  { name: "Area of Effect", hasTiers: true, modifierType: 'function', modifier: aoeModifier },
-  { name: "Lasting", hasTiers: true, modifierType: 'functionMultiply', modifier: lastingModifier, types: ['Concentration', 'Channeling', 'Mobile Origin Spell', 'Mobile Origin Caster'] },
+  { name: "Area of Effect", hasTiers: true, modifierType: 'function', modifier: "aoeModifier" },
+  { name: "Lasting", hasTiers: true, modifierType: 'functionMultiply', modifier: "lastingModifier", types: ['Concentration', 'Channeling', 'Mobile Origin Spell', 'Mobile Origin Caster'] },
   { name: "Delay", hasTiers: false, modifierType: 'multiply', modifier: 0.333 },
   { name: "Sculpted (Immune)", hasTiers: false, modifierType: 'add', modifier: 2 },
   { name: "Sculpted (Pre-sculpted)", hasTiers: false, modifierType: 'add', modifier: 3 },
   { name: "Sculpted (Sculpted)", hasTiers: false, modifierType: 'add', modifier: 4 },
-  { name: "Requires Component", hasTiers: true, modifierType: 'function', modifier: componentModifier },
+  { name: "Requires Component", hasTiers: true, modifierType: 'function', modifier: "componentModifier" },
 ]

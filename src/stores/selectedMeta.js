@@ -1,7 +1,7 @@
 
-import { writable } from 'svelte/store';
+import { persistedStore } from './persistedStore';
 
-export const name = writable("");
-export const description = writable("");
-export const selectedDomain = writable("");
-export const selectedMode = writable("");
+export const name = persistedStore("name")
+export const description = persistedStore("description");
+export const selectedDomain = persistedStore("selectedDomain");
+export const selectedMode = persistedStore("selectedMode");

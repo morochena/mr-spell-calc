@@ -2,11 +2,17 @@
   import { name, description, selectedDomain, selectedMode } from "../stores/selectedMeta.js";
 
   let domains = [`Sorcery`, `Fire`, `Water`, `Earth`, `Air`, `Necromancy`, `Holy`, `Mind`, `Illusion`, `Nature`];
-
   let modes = [`Spell`, `Unpredicable`, `Stable`, `Imbue`];
+
+  const reset = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
 </script>
 
 <div class="w-96">
+  <button on:click={reset}>Reset All</button>
+
   <h2 class="text-xl">1. Meta</h2>
 
   <div>

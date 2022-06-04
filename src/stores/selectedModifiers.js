@@ -1,4 +1,5 @@
 
-import { writable } from 'svelte/store';
+import { persistedStore } from './persistedStore';
 
-export const selectedModifiers = writable([]);
+// @ts-ignore
+export const selectedModifiers = persistedStore("selectedModifiers", []);

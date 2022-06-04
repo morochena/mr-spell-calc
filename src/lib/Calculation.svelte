@@ -3,16 +3,39 @@
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
 
+  import {
+    splitModifier,
+    rangeModifier,
+    aoeModifier,
+    lastingModifier,
+    componentModifier,
+  } from "../data/availableModifiers.js";
+
+  const runModifier = (name, tier) => {
+    switch (name) {
+      case "splitModifier":
+        return splitModifier(tier);
+      case "rangeModifier":
+        return rangeModifier(tier);
+      case "aoeModifier":
+        return aoeModifier(tier);
+      case "lastingModifier":
+        return lastingModifier(tier);
+      case "componentModifier":
+        return componentModifier(tier);
+    }
+  };
+
   let selectedModifierValues = [];
   let selectedEffectValues = [];
   let totalSPCost = 0;
 
-  const unsub2 = selectedEffects.subscribe((value) => {
+  selectedEffects.subscribe((value) => {
     selectedEffectValues = value;
     calculateSPCost();
   });
 
-  const unsubscribe = selectedModifiers.subscribe((value) => {
+  selectedModifiers.subscribe((value) => {
     selectedModifierValues = value;
     calculateSPCost();
   });
@@ -31,6 +54,7 @@
   }
 
   function calculateSPCost() {
+    console.log(selectedModifierValues);
     let modifierCost = selectedModifierValues.reduce((total, modifier) => {
       let cost = 0;
       switch (modifier.modifierType) {
@@ -41,10 +65,10 @@
           cost = modifier.modifier * modifier.tier * -1;
           break;
         case "function":
-          cost = modifier.modifier(modifier.tier);
+          cost = runModifier(modifier.modifier, modifier.tier);
           break;
         case "functionMultiply":
-          cost = modifier.modifier(modifier.tier)[0];
+          cost = runModifier(modifier.modifier, modifier.tier)[0];
           break;
       }
       return total + cost;
@@ -63,7 +87,7 @@
 
     spMultipliers.forEach((modifier) => {
       if (modifier.modifierType === "functionMultiply") {
-        totalSPCost *= modifier.modifier(modifier.tier)[1];
+        totalSPCost *= runModifier(modifier.modifier, modifier.tier)[1];
       } else {
         totalSPCost *= modifier.modifier;
       }
@@ -85,9 +109,11 @@
       case "multiply":
         return `x${modifier.modifier * modifier.tier}`;
       case "function":
-        return `${modifier.modifier(modifier.tier)}`;
+        return `${runModifier(modifier.modifier, modifier.tier)}`;
       case "functionMultiply":
-        return `x${modifier.modifier(modifier.tier)[1]} and +${modifier.modifier(modifier.tier)[0]}`;
+        return `x${runModifier(modifier.modifier, modifier.tier)[1]} and +${
+          runModifier(modifier.modifier, modifier.tier)[0]
+        }`;
     }
   };
 </script>
