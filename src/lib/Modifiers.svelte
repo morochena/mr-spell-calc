@@ -1,4 +1,6 @@
 <script>
+  import { range } from "../utils/range.js";
+
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { availableModifiers } from "../data/availableModifiers.js";
 
@@ -61,16 +63,9 @@
                 bind:value={modifier.tier}
                 class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
+                {#each range(1, 50, 1) as i}
+                  <option value={i}>{i}</option>
+                {/each}
               </select>
             {/if}
           </td>
