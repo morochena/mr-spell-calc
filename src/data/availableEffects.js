@@ -21,6 +21,8 @@ export const availableEffects = [
   { name: "Create or Destroy Element", domains: ["Air", "Earth", "Fire", "Water"], hasTiers: true, description: "Fuck thermodynamics" }, // TODO
   { name: "Apply Force", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Nature"], cost: 0, hasTiers: true, description: "" },
   { name: "Damage", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy"], cost: 2, hasTiers: true, description: "Adds [tier] damage" },
+  { name: "Damage (Armor Piercing)", domains: ["Fire", "Water", "Necromancy"], cost: 1, hasTiers: true, description: "[tier] point(s) of armor negated" },
+  { name: "Damage (Scambled Targeting)", domains: ["Fire", "Water", "Necromancy"], cost: 0, hasTiers: false, description: "This spell rolls for a new body part to Damage every time it does damage" },
   { name: "Transform", domains: ["Holy", "Water", "Air", "Earth", "Necromancy", "Nature"], cost: 1, hasTiers: true, description: "[tier * 1000]cm^3 material affected. Change elemental structure of something, turn water into wine, lead into gold, flesh into a grotesque offering to the dark gods. " },
   { name: "Armor", domains: ["Sorcery", "Earth", "Nature"], cost: 4, hasTiers: true, description: "[tier * 3] Armor point(s) gained" },
   { name: "Healing (1)", domains: ["Holy", "Water"], cost: 4, hasTiers: true, description: "Heal [tier] Body point(s)" },
