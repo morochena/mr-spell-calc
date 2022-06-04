@@ -29,6 +29,9 @@
         </option>
       {/each}
     </select>
+    {#if selectedModifier && selectedModifier.description}
+      <p class="mt-2 bg-gray-50 rounded-lg py-5 px-6 mb-4 text-sm text-gray-500 mb-3">{selectedModifier.description}</p>
+    {/if}
 
     <button
       disabled={!selectedModifier}
