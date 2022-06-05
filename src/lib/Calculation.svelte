@@ -1,5 +1,5 @@
 <script>
-  import { name, description, selectedDomain, selectedMode } from "../stores/selectedMeta.js";
+  import { name, description, selectedDomain, selectedMode, SPCost } from "../stores/selectedMeta.js";
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
   import {calculateDescription } from "../utils/CalcDescription.js";
@@ -10,25 +10,52 @@
     lastingModifier,
     componentModifier,
   } from "../data/availableModifiers.js";
+  import { get } from 'svelte/store';
 
-  const runModifier = (name, tier) => {
-    switch (name) {
-      case "splitModifier":
-        return splitModifier(tier);
-      case "rangeModifier":
-        return rangeModifier(tier);
-      case "aoeModifier":
-        return aoeModifier(tier);
-      case "lastingModifier":
-        return lastingModifier(tier);
-      case "componentModifier":
-        return componentModifier(tier);
+  import { 
+    createElement
+  } from '../data/availableEffects.js'
+
+  const runModifier = (modifier) => {
+    // evaluates eg. splitModifier(tier)
+
+    if (modifier.name.includes("Lasting")) {
+      return eval(`${modifier.amount}(${modifier.tier},'${modifier.name}')`);
     }
+    if (name) {
+      return eval(`${modifier.amount}(${modifier.tier})`);
+    }
+
+    return 0;
   };
 
   let selectedModifierValues = [];
   let selectedEffectValues = [];
   let totalSPCost = 0;
+  let totalSPAdds = 0;
+  let totalSPMults = 0;
+  let spellResist = 0;
+  let spellCost = 0;
+
+
+  function calcSpellResist(value) {
+    return calcSpellCost(value) + 5;
+  }
+  
+  function calcSpellCost(value) {
+
+    let cost = Math.ceil(value/10.0) + 1;
+    const modList = get(selectedModifiers)
+    if (modList.filter(mod => mod.name === "Exhausting").length > 0) {
+      cost +=1;
+    }
+    if (modList.filter(mod => mod.name === "Uncomplicated").length > 0) {
+      cost -=1;
+    }
+//TODO essentially I need to run the cost calculations without Uncomplicated/Exhausting and then with and compare them
+
+    return cost;
+  }
 
   selectedEffects.subscribe((value) => {
     selectedEffectValues = value;
@@ -40,68 +67,79 @@
     calculateSPCost();
   });
 
-  
+  SPCost.subscribe((value) => {
+    spellResist = calcSpellResist(value)
+    spellCost = calcSpellCost(value)
+  })
 
   function calculateSPCost() {
-    console.log(selectedModifierValues);
-    let modifierCost = selectedModifierValues.reduce((total, modifier) => {
+    const effectAndModifierValues = selectedEffectValues.concat(selectedModifierValues);
+
+    totalSPAdds = 0;
+    totalSPMults = 1;
+
+    let modifierCost = effectAndModifierValues.reduce((total, modifier) => {
       let cost = 0;
       switch (modifier.modifierType) {
         case "add":
-          cost = modifier.modifier * modifier.tier;
+          cost = modifier.amount * modifier.tier;
           break;
         case "reduce":
-          cost = modifier.modifier * modifier.tier * -1;
+          cost = modifier.amount * modifier.tier * -1;
           break;
         case "function":
-          cost = runModifier(modifier.modifier, modifier.tier);
+          cost = runModifier(modifier);
           break;
         case "functionMultiply":
-          cost = runModifier(modifier.modifier, modifier.tier)[0];
+          if (modifier.name.includes("Lasting")) {
+            cost = runModifier(modifier)[0];
+          } else {
+            cost = runModifier(modifier)[0];
+          }
           break;
       }
       return total + cost;
     }, 0);
 
-    let effectCost = selectedEffectValues.reduce((total, effect) => {
-      let cost = effect.tier * effect.cost;
-      return total + cost;
-    }, 0);
+    totalSPAdds = modifierCost;
+    totalSPCost = modifierCost;
 
-    totalSPCost = modifierCost + effectCost;
-
-    let spMultipliers = selectedModifierValues.filter(
+    let spMultipliers = effectAndModifierValues.filter(
       (modifier) => modifier.modifierType === "multiply" || modifier.modifierType === "functionMultiply"
     );
 
     spMultipliers.forEach((modifier) => {
       if (modifier.modifierType === "functionMultiply") {
-        totalSPCost *= runModifier(modifier.modifier, modifier.tier)[1];
+        totalSPCost *= runModifier(modifier)[1];
+        totalSPMults *= runModifier(modifier)[1];
       } else {
-        totalSPCost *= modifier.modifier;
+        totalSPCost *= modifier.amount;
+        totalSPMults *= modifier.amount;
       }
     });
 
-    totalSPCost = Math.round(totalSPCost);
+    totalSPCost = Math.ceil(totalSPCost);
+    totalSPCost = Math.max(totalSPCost,0);
+    $SPCost = totalSPCost;
   }
-
-  const calculateEffectCostText = (effect) => {
-    return effect.cost * effect.tier;
-  };
 
   const calculateCostText = (modifier) => {
     switch (modifier.modifierType) {
       case "add":
-        return `+${modifier.modifier * modifier.tier}`;
+        return `+${modifier.amount * modifier.tier}`;
       case "reduce":
-        return `${modifier.modifier * modifier.tier * -1}`;
+        return `${modifier.amount * modifier.tier * -1}`;
       case "multiply":
-        return `x${modifier.modifier * modifier.tier}`;
+        return `x${modifier.amount * modifier.tier}`;
       case "function":
-        return `${runModifier(modifier.modifier, modifier.tier)}`;
+        const amount = runModifier(modifier)
+        const operator = amount > 0 ? "+" : "";
+        return `${operator}${amount}`;
       case "functionMultiply":
-        return `x${runModifier(modifier.modifier, modifier.tier)[1]} and +${
-          runModifier(modifier.modifier, modifier.tier)[0]
+        const amountM = runModifier(modifier)[0];
+        const operatorM = amountM > 0 ? "+" : "";
+        return `x${runModifier(modifier)[1]} and ${operatorM}${
+          runModifier(modifier)[0]
         }`;
     }
   };
@@ -109,10 +147,17 @@
 
 <div class="mt-10">
   <h2 class="text-xl">Summary</h2>
+  <div class="bg-black text-white">
+    <div>
   <p><strong>Name:</strong> {$name}</p>
   <p><strong>Description:</strong> {$description}</p>
   <p><strong>Domain:</strong> {$selectedDomain}</p>
   <p><strong>Mode:</strong> {$selectedMode}</p>
+  <div class="text-lg">Spell Difficulty:<strong> {$SPCost}</strong></div>
+  <div class="text-lg">Mental Cost: <strong>{spellCost}</strong></div>
+</div>
+  <div></div>
+  </div>
   <table class="mt-2 min-w-full divide-y divide-gray-300">
     <thead class="bg-gray-50">
       <tr>
@@ -129,14 +174,14 @@
           <td>{modifier.name}</td>
           <td>{calculateCostText(modifier)}</td>
           <td>{modifier.tier}</td>
-          <td>{modifier.description}</td>
+          <td>{calculateDescription(modifier)}</td>
           <td>{modifier.notes}</td>
         </tr>
       {/each}
       {#each selectedEffectValues as effect}
         <tr>
           <td>{effect.name}</td>
-          <td>{calculateEffectCostText(effect)}</td>
+          <td>{calculateCostText(effect)}</td>
           <td>{effect.tier}</td>
           <td>{calculateDescription(effect)}</td>
           <td>{effect.notes}</td>
@@ -144,7 +189,7 @@
       {/each}
       <tr>
         <td>Total</td>
-        <td><strong>{totalSPCost}</strong></td>
+        <td>{totalSPAdds} x {totalSPMults} = <strong>{totalSPCost}</strong></td>
         <td />
       </tr>
     </tbody>

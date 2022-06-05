@@ -1,4 +1,9 @@
 
+import { get } from 'svelte/store';
+import * as meta from "../stores/selectedMeta.js";
+import * as modifiers from "../stores/selectedModifiers.js";
+import * as effects from "../stores/selectedEffects.js";
+
 export const splitModifier = (tier) => {
   if (tier == 1) return 8;
   if (tier == 2) return 15;
@@ -42,27 +47,44 @@ export const aoeModifier = (tier) => {
 }
 
 export const lastingModifier = (tier, type = null) => {
+  let baseCost = 0
   let cost = 0
   let multiplier = 0
 
+  if (type == 'Lasting (Rounds)') {
+    baseCost = 2
+    multiplier = 2
+  } else if (type == 'Lasting (Minutes)') {
+    baseCost = 3
+    multiplier = 3
+  } else if (type == 'Lasting (Hours)') {
+    cost += 2
+    baseCost = 4
+    multiplier = 4
+  } else if (type == 'Lasting (Days)') {
+    cost += 5
+    baseCost = 5
+    multiplier = 5
+  } else if (type == 'Lasting (Hours)') {
+    cost += 8
+    baseCost = 6
+    multiplier = 8
+  }
+  const { selectedModifiers } = modifiers;
+    const modList = get(selectedModifiers)
+    if (modList.filter(mod => mod.name === "Concentration").length > 0) {
+      cost -= 1;
+      baseCost -= 1;
+    }
+    if (modList.filter(mod => mod.name === "Channelling").length > 0) {
+      cost -= 3;
+      baseCost -= 3;
+    }
+
   for (let i = 0; i < tier; i++) {
     if (i < 1) {
-      multiplier = 2
     } else if (i < 5) {
-      multiplier = 2
-      cost += 2
-    } else if (i < 10) {
-      multiplier = 3
-      cost += 3
-    } else if (i < 10) {
-      multiplier = 4
-      cost += 2
-    } else if (i < 10) {
-      multiplier = 5
-      cost += 2
-    } else {
-      multiplier = 8
-      cost += 8
+      cost += baseCost
     }
   }
 
@@ -73,32 +95,43 @@ export const componentModifier = (tier) => {
   let cost = 0;
 
   for (let i = 0; i < tier; i++) {
-    cost += 1
+    cost -= 1
   }
 
   return cost;
 }
 
 export const availableModifiers = [
-  { name: "Ray", hasTiers: false, modifierType: 'reduce', modifier: 3, description: "Cannot be Area of Effect and the targets must be in direct line of sight for the character for the entire duration of the spell or the spell fails.  The spell has to have at least 10m range and target can't be self" },
-  { name: "Aura", hasTiers: false, modifierType: 'add', modifier: 2, description: "Automatically has Area of effect and area of effect is doubled for every tier. The Spell cannot do damage." },
-  { name: "Reaction", hasTiers: false, modifierType: 'add', modifier: 2, description: "This spell can be used as an interruption on another person’s turn. The spell cannot be a Delay Spell." },
-  { name: "Exhausting", hasTiers: false, modifierType: 'reduce', modifier: 4, description: "Increase the mental cost of the spell by 1. If the removal of the SP causes the spell to move to the next cost bracket, increase the cost by 2 instead." },
-  { name: "Uncomplicated", hasTiers: false, modifierType: 'add', modifier: 4, description: "Decrease the mental cost of the spell by 1. If the addition of the SP causes the spell to move to the next cost bracket, decrease the cost by 2 instead." },
-  { name: "Charge Up", hasTiers: false, modifierType: 'reduce', modifier: 4, description: "Casting the spell in combat takes both actions. Out of combat the spell has a few seconds of obvious noticeable charging. " },
-  { name: "Dangerous", hasTiers: false, modifierType: 'reduce', modifier: 5, description: "On a failure of the spell or a roll of a 1, the cost of the spell is increased by 6, and cannot be taken from Arcana. The cost can overflow from mind to body. Spells cannot be stable, nor can this spell ever become a cantrip." },
-  { name: "Painful", hasTiers: false, modifierType: 'reduce', modifier: 6, description: "The cost applies to body as well as mind. This essentially doubles the cost of the spell." },
-  { name: "Stealth", hasTiers: false, modifierType: 'add', modifier: 1, description: "Casting the spell is discreet, with no visible somatic or vocal components, nor any glow or magical energies. If someone inspects you for the ability to create magic, they will not detect any of your stealth spells. Cannot be Somatic or Charge Up. If the spell fails, the magical energy is detectable." },
-  { name: "Somatic", hasTiers: false, modifierType: 'reduce', modifier: 3, description: "This spell requires very precise manipulation of your body to go off correctly, aside from just calling out the invocation and waving your hands around, almost like a dance. Specifically this means that if your hands are bound you are unable to cast this spell. Cannot be Stealth or Prepared." },
-  { name: "Split", hasTiers: true, modifierType: 'function', modifier: "splitModifier", types: ['Concentrated Power'], description: "Creates an extra effect of the spell per tier." },
-  { name: "Range", hasTiers: true, modifierType: 'function', modifier: "rangeModifier", description: "Move the origin point of the spell away from your hand to somewhere within the specified range." },
-  { name: "Trigger Action", hasTiers: false, modifierType: 'multiply', modifier: 0.5, description: "The Spell Target has to perform a specific action, or at least requires them not fighting back while someone else does it to them; or otherwise for them to be incapacitated and unable in any way to resist the action performed on them; such that a physical attack against them would be an automatic hit." },
-  { name: "Thwarted By", hasTiers: false, modifierType: 'multiply', modifier: 0.667, description: "Anyone targeted by the spell (directly or through area of effect) can roll their Stat bonus versus the thwart difficulty of the spell, which is 6 + 1/10th the SP of the spell. If they succeed, they take half the effects of the spell." },
-  { name: "Area of Effect", hasTiers: true, modifierType: 'function', modifier: "aoeModifier", description: "Covers a certain continuous area encapsulated by a polygon." },
-  { name: "Lasting", hasTiers: true, modifierType: 'functionMultiply', modifier: "lastingModifier", types: ['Concentration', 'Channeling', 'Mobile Origin Spell', 'Mobile Origin Caster'], description: "Lasts for a certain duration." },
-  { name: "Delay", hasTiers: false, modifierType: 'multiply', modifier: 0.333, description: "The spell has to have the lasting modifier, The spell doesn't activate immediately, but instead goes off after a certain amount of time specified during the spell creation, which has to be at least half the total time the spell lasts." },
-  { name: "Sculpted (Immune)", hasTiers: false, modifierType: 'add', modifier: 2, description: "Spell will not target the caster" },
-  { name: "Sculpted (Pre-sculpted)", hasTiers: false, modifierType: 'add', modifier: 3, description: "Spell will not target anyone chosen at spell creation by some physical criteria: race, gender, birthmarks, tattoos, etc" },
-  { name: "Sculpted (Sculpted)", hasTiers: false, modifierType: 'add', modifier: 4, description: "Spell will not target anyone chosen by the caster." },
-  { name: "Requires Component", hasTiers: true, modifierType: 'function', modifier: "componentModifier", description: "Requires a specific component." },
+  { name: "Ray", hasTiers: false, incompatible:["Area of Effect (Sphere)","Area of Effect (Rectangle)","Area of Effect (Cone)","Area of Effect (Custom)"], prerequisite:["Range"], modifierType: 'reduce', amount: 3, description: "the targets must be in direct line of sight for the character for the entire duration of the spell or the spell fails" },
+  { name: "Aura", hasTiers: false, incompatible:["Damage","Attack"], prerequisite:["Area of Effect (Sphere)","Area of Effect (Rectangle)","Area of Effect (Cone)","Area of Effect (Custom)"], modifierType: 'add', amount: 2, description: " is an Aura" },
+  { name: "Reaction", hasTiers: false, incompatible: ["Charge Up"], modifierType: 'add', amount: 2, description: "as a Reaction" },
+  { name: "Exhausting", hasTiers: false,  incompatible: ["Uncomplicated"], modifierType: 'reduce', amount: 4, description: "" },
+  { name: "Uncomplicated", hasTiers: false, incompatible: ["Exhausting"], modifierType: 'add', amount: 4, description: "" },
+  { name: "Charge Up", hasTiers: false, incompatible:["Stealth"], modifierType: 'reduce', amount: 4, description: "taking 2 actions of obvious magical charging" },
+  { name: "Dangerous", hasTiers: false, modifierType: 'reduce', amount: 5, description: "On a failure of the spell or a roll of a 1, the cost of the spell is increased by 6, and cannot be taken from Arcana. The cost can overflow from mind to body" },
+  { name: "Painful", hasTiers: false, modifierType: 'reduce', amount: 6, description: "The cost applies to body as well as mind" },
+  { name: "Stealth", hasTiers: false, incompatible:["Somatic","Charge Up"], modifierType: 'add', amount: 1, description: "is discreet, with no visible somatic or vocal components, nor any glow or magical energies." },
+  { name: "Somatic", hasTiers: false, incompatible:["Stealth"], modifierType: 'reduce', amount: 3, description: "requires both hands to perform [notes]" },
+  { name: "Split", hasTiers: true, modifierType: 'function', amount: "splitModifier", types: ['Concentrated Power'], description: "splite to [tier+1] effects, each of which" },
+  { name: "Range", hasTiers: true, modifierType: 'function', amount: "rangeModifier", description: "has a range of {rangeMeters([tier])} meters or {rangeMeters([tier])*3} with disadvantage" },
+  { name: "Trigger Action", hasTiers: false, modifierType: 'multiply', amount: 0.5, description: "the target has to [notes] which takes an action in combat, or be restrained and have someone else perform the action for them" },
+  { name: "Thwarted By", hasTiers: false, modifierType: 'multiply', amount: 0.667, description: "the target rolls their {thwartStat([domain])} bonus versus difficulty {calcSpellResist()} " },
+  { name: "Area of Effect (Sphere)", hasTiers: true, modifierType: 'function', amount: "aoeModifier", description: "covers a continuous Sphere with radius {radiusCalc([tier])} ." },
+  { name: "Area of Effect (Rectangle)", hasTiers: true, modifierType: 'function', amount: "aoeModifier", description: "covers a continuous Rectangle with length [notes] and width {rectWidthCalc([tier],[notes])}" },
+  { name: "Area of Effect (Cone)", hasTiers: true, modifierType: 'function', amount: "aoeModifier", description: "covers a continuous Cone with length [notes] and width {rectWidthCalc([tier],[notes])}." },
+  { name: "Area of Effect (Custom)", hasTiers: true, modifierType: 'function', amount: "aoeModifier", description: "covers a continuous polygon with area {aoeArea([tier])} meters Sq." },
+  { name: "Lasting (Rounds)", incompatible:["Lasting (Minutes)","Lasting (Hours)","Lasting (Days)","Lasting (Weeks)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", maxTier: 5, description: "lasts for [tier] rounds" },
+  { name: "Lasting (Minutes)", incompatible:["Lasting (Rounds)","Lasting (Hours)","Lasting (Days)","Lasting (Weeks)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier",  maxTier: 15, description: "lasts for [tier] minutes" },
+  { name: "Lasting (Hours)", incompatible:["Lasting (Rounds)", "Lasting (Minutes)","Lasting (Days)","Lasting (Weeks)"],hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier",  maxTier: 24, description: "lasts for [tier] hours" },
+  { name: "Lasting (Days)", incompatible:["Lasting (Rounds)", "Lasting (Minutes)","Lasting (Hours)","Lasting (Weeks)"],hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier",  maxTier: 7, description: "lasts for [tier] days" },
+  { name: "Lasting (Weeks)", incompatible:["Lasting (Rounds)", "Lasting (Minutes)","Lasting (Hours)","Lasting (Days)"],hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", description: "lasts for [tier] weeks" },
+  { name: "Delay", prerequisite:["Lasting (Rounds)", "Lasting (Minutes)","Lasting (Hours)","Lasting (Days)","Lasting (Weeks)"], hasTiers: false, modifierType: 'multiply', amount: 0.333, description: "doesn't activate immediately, but instead goes off after half the total time the spell lasts for" },
+  { name: "Concentration", prerequisite:["Lasting (Rounds)", "Lasting (Minutes)","Lasting (Hours)","Lasting (Days)","Lasting (Weeks)"], hasTiers: false,  modifierType: 'add', amount: 0, description: "requires Concentration" },
+  { name: "Channelling", prerequisite:["Lasting (Rounds)", "Lasting (Minutes)","Lasting (Hours)","Lasting (Days)","Lasting (Weeks)"], hasTiers: false,  modifierType: 'add', amount: 0, description: "requires Channelling" },
+  { name: "Sculpted (Immune)", hasTiers: false, modifierType: 'add', amount: 2, description: "will not target the caster" },
+  { name: "Sculpted (Pre-sculpted)", hasTiers: false, modifierType: 'add', amount: 3, description: "will not target [notes]" },
+  { name: "Sculpted (Sculpted)", hasTiers: false, modifierType: 'add', amount: 4, description: "will not target anyone chosen by the caster." },
+  { name: "Requires Component", hasTiers: true, modifierType: 'function', amount: "componentModifier", description: "requires a [notes], of at least cost {calcComponentCost([tier])} Denar" },
+  { name: "Bulky Component", prerequisite: ["Requires Component"], hasTiers: false, modifierType: 'reduce', amount: 2, description: "the component is bulky"},
+  { name: "Component Consumed", prerequisite: ["Requires Component"], hasTiers: false, modifierType: 'reduce', amount: 3, description: "the component(s) are consumed" },
 ]

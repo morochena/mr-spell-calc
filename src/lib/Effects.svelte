@@ -76,7 +76,7 @@
                 bind:value={effect.tier}
                 class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
               >
-                {#each range(1, 50, 1) as i}
+                {#each range(1, effect.maxTier+1 || 50, 1) as i}
                   <option value={i}>{i}</option>
                 {/each}
               </select>
