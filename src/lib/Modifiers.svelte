@@ -1,9 +1,9 @@
 <script>
   import { range } from "../utils/range.js";
-
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { availableModifiers } from "../data/availableModifiers.js";
-
+  import { calculateDescription } from "../utils/CalcDescription.js";
+  
   let selectedModifier = null;
 
   const handleSubmit = () => {
@@ -50,6 +50,7 @@
         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Modifier</th>
         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tier</th>
         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Notes</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
         <th scope="col" />
       </tr>
     </thead>
@@ -63,7 +64,7 @@
                 bind:value={modifier.tier}
                 class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
               >
-                {#each range(1, 50, 1) as i}
+                {#each range(1, modifier.maxTier+1 || 50, 1) as i}
                   <option value={i}>{i}</option>
                 {/each}
               </select>
@@ -86,6 +87,9 @@
                 />
               </svg>
             </button>
+          </td>
+          <td>
+            {calculateDescription(modifier)}
           </td>
         </tr>
       {/each}
