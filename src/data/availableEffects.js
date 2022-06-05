@@ -17,8 +17,9 @@ Nature 🌳
 export const availableEffects = [
 
   { name: "Attack", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy"], cost: 0, hasTiers: false, description: "Counts as an attack on the target. The Cast roll must pass the target’s Dodge rating as well as the cast difficulty in order to hit. Add 1d10 to the Total damage dealt." },
-  { name: "Attack (Targeted)", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy"], cost: 2, hasTiers: false, description: "Counts as an attack on the target. The spell does not need to beat the target Dodge rating, and the target cannot spend Advantage points to increase their Dodge and escape the hit. Add 1d10 to the Total damage dealt." },
-  { name: "Create or Destroy Element", domains: ["Air", "Earth", "Fire", "Water"], hasTiers: true, description: "Fuck thermodynamics" }, // TODO
+  { name: "Attack (Targeted)", domains: ["Sorcery", "Necromancy", "Holy"], cost: 2, hasTiers: false, description: "Counts as an attack on the target. The spell does not need to beat the target Dodge rating, and the target cannot spend Advantage points to increase their Dodge and escape the hit. Add 1d10 to the Total damage dealt." },
+  { name: "Create Element", domains: ["Air", "Earth", "Fire", "Water"], hasTiers: true, description: "Fuck thermodynamics" },
+  { name: "Destroy Element", domains: ["Air", "Earth", "Fire", "Water"], hasTiers: true, description: "Fuck thermodynamics" },  // TODO
   { name: "Apply Force", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Nature"], cost: 0, hasTiers: true, description: "" },
   { name: "Damage", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy"], cost: 2, hasTiers: true, description: "Adds [tier] damage" },
   { name: "Damage (Armor Piercing)", domains: ["Fire", "Water", "Necromancy"], cost: 1, hasTiers: true, description: "[tier] point(s) of armor negated" },
@@ -29,7 +30,7 @@ export const availableEffects = [
   { name: "Healing (1d10)", domains: ["Holy", "Nature"], cost: 15, hasTiers: true, description: "Heal [tier]d10 Body points" },
   { name: "Drain", domains: ["Necromancy"], cost: 3, hasTiers: true, description: "Take [tier] Body point from a target in range and give it to another target in range of the spell. In case of an attack, distribute the 1d10 damage as well." },
   { name: "Restore Wound", domains: ["Holy", "Necromancy"], cost: 2, hasTiers: true, description: "Changes the wound up by as many points as body healed, or the maximum level of restore wound, whichever is lower." },
-  { name: "Resurrect host (Holy)", domains: ["Holy"], cost: 20, hasTiers: true, description: "Brings a body back to life by either grabbing someone’s soul or creating a simulacrum from the ether. Normally the heal power does not work on dead targets, but coupled with the resurrection power, heals can add body points even if the target has less than their negative maximum body point total. The soul has to belong to the specific body, and be willing to come back to the body. Once the spell is over, the creature remains living." },
+  { name: "Resurrect host (Holy)", domains: ["Holy"], cost: 20, hasTiers: true, description: "Brings a body back to life by pulling their soul from the ether. Normally the heal power does not work on dead targets, but coupled with the resurrection power, heals can add body points even if the target has less than their negative maximum body point total. The soul has to belong to the specific body, and be willing to come back to the body. Once the spell is over, the creature remains living." },
   { name: "Resurrect host (Necromancy)", domains: ["Necromancy"], cost: 2, hasTiers: true, description: "Brings a body back to life by either grabbing someone’s soul or creating a simulacrum from the ether. Normally the heal power does not work on dead targets, but coupled with the resurrection power, heals can add body points even if the target has less than their negative maximum body point total. Tthe soul can belong to anyone or can be an simulacrum made of many souls that doesn’t do anything unless commanded. A soul belonging to another body automatically gains a point of madness. It leaves its body after the spell is over." },
   { name: "Emulate Item", domains: ["Earth", "Holy", "Air", "Sorcery", "Fire", "Water"], cost: 1, hasTiers: true, description: "Only mundane items and no modifiers. Starts at 10 Structure Points or what the item had, whichever is less." },
   { name: "Harden Item", domains: ["Sorcery", "Holy", "Nature"], cost: 2, hasTiers: true, description: "Add [tier] structure points" },
@@ -43,7 +44,7 @@ export const availableEffects = [
   { name: "Control (Limited)", domains: ["Nature"], cost: 10, hasTiers: true, description: "Works on creatures with INT bonus of -2 or lower.For a cheaper option, the control is limited. Every time the character has to follow a command they do not consent to they can roll a Willpower-Self Control check vs the spell difficulty to see if they snap out of it. If the user has Mind points left, it does 2 damage per level of limited control." },
 
 
-  { name: "Help Attribute", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], cost: 4, hasTiers: true, description: "Add [tier] points to a stat" },
+  { name: "Help Attribute", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], cost: 4, hasTiers: true, description: "Add [tier] points to [notes]" },
   { name: "Help Skill", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], cost: 2, hasTiers: true, description: "Add [tier] points to a skill" },
   { name: "Help Speciality", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], cost: 1, hasTiers: true, description: "Add [tier] points to a speciality" },
 ]

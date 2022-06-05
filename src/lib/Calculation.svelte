@@ -2,7 +2,7 @@
   import { name, description, selectedDomain, selectedMode } from "../stores/selectedMeta.js";
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
-
+  import {calculateDescription } from "../utils/CalcDescription.js";
   import {
     splitModifier,
     rangeModifier,
@@ -40,18 +40,7 @@
     calculateSPCost();
   });
 
-  function calculateDescription(effect) {
-    let description = effect.description;
-    let evalMatch = description.match(/\[(.*?)\]/);
-    if (evalMatch) {
-      let evalString = evalMatch[1];
-      evalString = evalString.replace("tier", "effect.tier");
-      let evalResult = eval(evalString);
-      description = description.replace(evalMatch[0], evalResult);
-    }
-
-    return description;
-  }
+  
 
   function calculateSPCost() {
     console.log(selectedModifierValues);

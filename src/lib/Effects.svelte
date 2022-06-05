@@ -3,7 +3,8 @@
   import { availableEffects } from "../data/availableEffects.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
   import { selectedDomain } from "../stores/selectedMeta.js";
-
+  import {calculateDescription } from "../utils/CalcDescription.js";
+  
   let selectedEffect = null;
   let selectedDescription = null;
   let selectedDomainValue = null;
@@ -62,6 +63,7 @@
         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Effect</th>
         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tier</th>
         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Notes</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white">
@@ -97,6 +99,9 @@
                 />
               </svg>
             </button>
+          </td>
+          <td>
+            {calculateDescription(effect)}
           </td>
         </tr>
       {/each}
