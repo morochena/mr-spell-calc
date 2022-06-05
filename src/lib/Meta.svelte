@@ -1,8 +1,18 @@
 <script>
+  import { loadSpell, saveSpell } from "../utils/saveLoadService.js";
+
   import { name, description, selectedDomain, selectedMode } from "../stores/selectedMeta.js";
 
   let domains = [`Sorcery`, `Fire`, `Water`, `Earth`, `Air`, `Necromancy`, `Holy`, `Mind`, `Illusion`, `Nature`];
   let modes = [`Spell`, `Unpredicable`, `Stable`, `Imbue`];
+
+  const save = () => {
+    saveSpell();
+  };
+
+  const load = () => {
+    loadSpell();
+  };
 
   const reset = () => {
     localStorage.clear();
@@ -10,11 +20,25 @@
   };
 </script>
 
-<button
-  on:click={reset}
-  class="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 justify-self-end"
-  >Reset All</button
->
+<div class="flex justify-end">
+  <button
+    on:click={save}
+    class="mt-2 mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 justify-self-end"
+    >Save</button
+  >
+
+  <button
+    on:click={load}
+    class="mt-2 mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 justify-self-end"
+    >Load</button
+  >
+
+  <button
+    on:click={reset}
+    class="mt-2 mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 justify-self-end"
+    >Reset</button
+  >
+</div>
 
 <div class="w-96">
   <h2 class="text-xl">1. Meta</h2>
