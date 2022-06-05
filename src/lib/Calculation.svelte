@@ -2,7 +2,7 @@
   import { name, description, selectedDomain, selectedMode, SPCost } from "../stores/selectedMeta.js";
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
-  import {calculateDescription } from "../utils/CalcDescription.js";
+  import { calculateDescription } from "../utils/CalcDescription.js";
   import {
     splitModifier,
     rangeModifier,
@@ -10,11 +10,9 @@
     lastingModifier,
     componentModifier,
   } from "../data/availableModifiers.js";
-  import { get } from 'svelte/store';
+  import { get } from "svelte/store";
 
-  import { 
-    createElement
-  } from '../data/availableEffects.js'
+  import { createElement } from "../data/availableEffects.js";
 
   const runModifier = (modifier) => {
     // evaluates eg. splitModifier(tier)
@@ -37,39 +35,37 @@
   let spellResist = 0;
   let spellCost = 0;
 
-
   function calcSpellResist(value) {
     return calcSpellCost(value) + 5;
   }
-  
-  function calcSpellCost(value) {
 
-    let cost = Math.ceil(value/10.0) + 1;
-    const modList = get(selectedModifiers)
-    if (modList.filter(mod => mod.name === "Exhausting").length > 0) {
-      cost +=1;
+  function calcSpellCost(value) {
+    let cost = Math.ceil(value / 10.0) + 1;
+    const modList = get(selectedModifiers);
+    if (modList.filter((mod) => mod.name === "Exhausting").length > 0) {
+      cost += 1;
     }
-    if (modList.filter(mod => mod.name === "Uncomplicated").length > 0) {
-      cost -=1;
+    if (modList.filter((mod) => mod.name === "Uncomplicated").length > 0) {
+      cost -= 1;
     }
-//TODO essentially I need to run the cost calculations without Uncomplicated/Exhausting and then with and compare them
+    //TODO essentially I need to run the cost calculations without Uncomplicated/Exhausting and then with and compare them
 
     return cost;
   }
 
   function verboseSpellMode(value) {
-    switch(value){
+    switch (value) {
       case `Unpredicable`:
         return "casts an unstable spell by rolling a skill check and doubling the dice numbers versus the Spell Difficulty and Winds of Magic";
-      case 'Stable':
+      case "Stable":
         return "casts a stable spell ";
-      case 'Imbue':
+      case "Imbue":
         return "Imbues an item. The item casts a stable spell";
-      case 'Spell':
+      case "Spell":
       default:
         return "casts a spell by rolling a skill check versus the Spell Difficulty and Winds of Magic";
     }
-  };
+  }
 
   selectedEffects.subscribe((value) => {
     selectedEffectValues = value;
@@ -82,9 +78,9 @@
   });
 
   SPCost.subscribe((value) => {
-    spellResist = calcSpellResist(value)
-    spellCost = calcSpellCost(value)
-  })
+    spellResist = calcSpellResist(value);
+    spellCost = calcSpellCost(value);
+  });
 
   function calculateSPCost() {
     const effectAndModifierValues = selectedEffectValues.concat(selectedModifierValues);
@@ -133,7 +129,7 @@
     });
 
     totalSPCost = Math.ceil(totalSPCost);
-    totalSPCost = Math.max(totalSPCost,0);
+    totalSPCost = Math.max(totalSPCost, 0);
     $SPCost = totalSPCost;
   }
 
@@ -146,15 +142,13 @@
       case "multiply":
         return `x${modifier.amount * modifier.tier}`;
       case "function":
-        const amount = runModifier(modifier)
+        const amount = runModifier(modifier);
         const operator = amount > 0 ? "+" : "";
         return `${operator}${amount}`;
       case "functionMultiply":
         const amountM = runModifier(modifier)[0];
         const operatorM = amountM > 0 ? "+" : "";
-        return `x${runModifier(modifier)[1]} and ${operatorM}${
-          runModifier(modifier)[0]
-        }`;
+        return `x${runModifier(modifier)[1]} and ${operatorM}${runModifier(modifier)[0]}`;
     }
   };
 </script>
@@ -171,7 +165,11 @@
       <div class="text-lg">Mental Cost: <strong>{spellCost}</strong></div>
     </div>
     <div>
-      <p>{$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier} {calculateDescription(modifier)} and  {/each} the target {#each selectedEffectValues as effect} {calculateDescription(effect)} {/each}</p>
+      <p>
+        {$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier}
+          {calculateDescription(modifier)} and&nbsp;
+        {/each} the target {#each selectedEffectValues as effect} {calculateDescription(effect)}.&nbsp; {/each}
+      </p>
     </div>
   </div>
   <table class="mt-2 min-w-full divide-y divide-gray-300">
@@ -205,7 +203,7 @@
       {/each}
       <tr>
         <td>Total</td>
-        <td>{totalSPAdds} x {totalSPMults} = <strong>{totalSPCost}</strong></td>
+        <td>{totalSPAdds} x {totalSPMults.toFixed(2)} = <strong>{totalSPCost}</strong></td>
         <td />
       </tr>
     </tbody>
