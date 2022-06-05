@@ -57,6 +57,20 @@
     return cost;
   }
 
+  function verboseSpellMode(value) {
+    switch(value){
+      case `Unpredicable`:
+        return "casts an unstable spell by rolling a skill check and doubling the dice numbers versus the Spell Difficulty and Winds of Magic";
+      case 'Stable':
+        return "casts a stable spell ";
+      case 'Imbue':
+        return "Imbues an item. The item casts a stable spell";
+      case 'Spell':
+      default:
+        return "casts a spell by rolling a skill check versus the Spell Difficulty and Winds of Magic";
+    }
+  };
+
   selectedEffects.subscribe((value) => {
     selectedEffectValues = value;
     calculateSPCost();
@@ -149,14 +163,16 @@
   <h2 class="text-xl">Summary</h2>
   <div class="bg-black text-white">
     <div>
-  <p><strong>Name:</strong> {$name}</p>
-  <p><strong>Description:</strong> {$description}</p>
-  <p><strong>Domain:</strong> {$selectedDomain}</p>
-  <p><strong>Mode:</strong> {$selectedMode}</p>
-  <div class="text-lg">Spell Difficulty:<strong> {$SPCost}</strong></div>
-  <div class="text-lg">Mental Cost: <strong>{spellCost}</strong></div>
-</div>
-  <div></div>
+      <p><strong>Name:</strong> {$name}</p>
+      <p><strong>Description:</strong> {$description}</p>
+      <p><strong>Domain:</strong> {$selectedDomain}</p>
+      <p><strong>Mode:</strong> {$selectedMode}</p>
+      <div class="text-lg">Spell Difficulty:<strong> {$SPCost}</strong></div>
+      <div class="text-lg">Mental Cost: <strong>{spellCost}</strong></div>
+    </div>
+    <div>
+      <p>{$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier} {calculateDescription(modifier)} and  {/each} the target {#each selectedEffectValues as effect} {calculateDescription(effect)} {/each}</p>
+    </div>
   </div>
   <table class="mt-2 min-w-full divide-y divide-gray-300">
     <thead class="bg-gray-50">
