@@ -161,9 +161,10 @@
       <p><strong>Description:</strong> {$description}</p>
       <p><strong>Domain:</strong> {$selectedDomain}</p>
       <p><strong>Mode:</strong> {$selectedMode}</p>
-      <div class="text-lg">Spell Difficulty:<strong> {$SPCost}</strong></div>
-      <div class="text-lg">Mental Cost: <strong>{spellCost}</strong></div>
+      <p><strong>Spell Difficulty:</strong> {$SPCost}</p>
+      <p><strong>Mental Cost:</strong> {spellCost}</p>
     </div>
+    <hr class="my-3" />
     <div>
       <p>
         {$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier}
