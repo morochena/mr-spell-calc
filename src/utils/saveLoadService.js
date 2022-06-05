@@ -31,6 +31,7 @@ export const saveSpell = () => {
 export const loadSpell = () => {
   const uploadNode = document.createElement("input")
   uploadNode.setAttribute("type", "file");
+  uploadNode.setAttribute("accept", "application/json");
 
   uploadNode.addEventListener("change", (e) => {
     const fileList = e.target.files;
