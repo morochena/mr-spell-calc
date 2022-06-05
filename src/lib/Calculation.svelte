@@ -155,7 +155,7 @@
 
 <div class="mt-10">
   <h2 class="text-xl">Summary</h2>
-  <div class="bg-black text-white">
+  <div class="mt-2 bg-gray-700 rounded-lg py-5 px-6 mb-4 text-sm text-white mb-3">
     <div>
       <p><strong>Name:</strong> {$name}</p>
       <p><strong>Description:</strong> {$description}</p>
