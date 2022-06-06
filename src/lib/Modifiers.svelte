@@ -27,7 +27,7 @@
       class="mt-1 block w-96 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
     >
       {#each $allowedModifiers as modifier}
-        <option value={modifier} disabled={modifier.disabled}>
+        <option value={modifier} hidden={modifier.disabled}>
           {modifier.name}
         </option>
       {/each}

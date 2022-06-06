@@ -1,5 +1,11 @@
 <script>
-  import { name, description, selectedDomain, selectedMode, SPCost } from "../stores/selectedMeta.js";
+  import {
+    name,
+    description,
+    selectedDomain,
+    selectedMode,
+    SPCost,
+  } from "../stores/selectedMeta.js";
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
   import { calculateDescription } from "../utils/CalcDescription.js";
@@ -13,7 +19,14 @@
 
   import { get } from "svelte/store";
 
-  import { createElement, movementCondition, geas, sound, plague, madness } from "../data/availableEffects.js";
+  import {
+    createElement,
+    movementCondition,
+    geas,
+    sound,
+    plague,
+    madness,
+  } from "../data/availableEffects.js";
 
   const runModifier = (modifier) => {
     // evaluates eg. splitModifier(tier)
@@ -29,6 +42,18 @@
         return lastingModifier(modifier.tier, modifier.name);
       case "componentModifier":
         return componentModifier(modifier.tier);
+      case "createElement":
+        return createElement(modifier.tier);
+      case "movementCondition":
+        return movementCondition(modifier.tier);
+      case "geas":
+        return geas(modifier.tier);
+      case "sound":
+        return sound(modifier.tier);
+      case "plague":
+        return plague(modifier.tier);
+      case "madness":
+        return madness(modifier.tier);
     }
 
     console.log("modifier case not handled: ", modifier.amount);
@@ -92,7 +117,9 @@
   });
 
   function calculateSPCost() {
-    const effectAndModifierValues = selectedEffectValues.concat(selectedModifierValues);
+    const effectAndModifierValues = selectedEffectValues.concat(
+      selectedModifierValues
+    );
 
     totalSPAdds = 0;
     totalSPMults = 1;
@@ -124,7 +151,9 @@
     totalSPCost = modifierCost;
 
     let spMultipliers = effectAndModifierValues.filter(
-      (modifier) => modifier.modifierType === "multiply" || modifier.modifierType === "functionMultiply"
+      (modifier) =>
+        modifier.modifierType === "multiply" ||
+        modifier.modifierType === "functionMultiply"
     );
 
     spMultipliers.forEach((modifier) => {
@@ -157,14 +186,18 @@
       case "functionMultiply":
         const amountM = runModifier(modifier)[0];
         const operatorM = amountM > 0 ? "+" : "";
-        return `x${runModifier(modifier)[1]} and ${operatorM}${runModifier(modifier)[0]}`;
+        return `x${runModifier(modifier)[1]} and ${operatorM}${
+          runModifier(modifier)[0]
+        }`;
     }
   };
 </script>
 
 <div class="mt-10">
   <h2 class="text-xl">Summary</h2>
-  <div class="mt-2 bg-gray-700 rounded-lg py-5 px-6 mb-4 text-sm text-white mb-3">
+  <div
+    class="mt-2 bg-gray-700 rounded-lg py-5 px-6 mb-4 text-sm text-white mb-3"
+  >
     <div>
       <p><strong>Name:</strong> {$name}</p>
       <p><strong>Description:</strong> {$description}</p>
@@ -178,18 +211,32 @@
       <p>
         {$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier}
           {calculateDescription(modifier, $SPCost)} and&nbsp;
-        {/each} the target {#each selectedEffectValues as effect} {calculateDescription(effect, $SPCost)}.&nbsp; {/each}
+        {/each} the target {#each selectedEffectValues as effect}
+          {calculateDescription(effect, $SPCost)}.&nbsp;
+        {/each}
       </p>
     </div>
   </div>
   <table class="mt-2 min-w-full divide-y divide-gray-300">
     <thead class="bg-gray-50">
       <tr>
-        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Cost</th>
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tier</th>
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Notes</th>
+        <th
+          scope="col"
+          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+          >Name</th
+        >
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          >Cost</th
+        >
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          >Tier</th
+        >
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          >Description</th
+        >
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          >Notes</th
+        >
       </tr>
     </thead>
     <tbody>
@@ -213,7 +260,10 @@
       {/each}
       <tr>
         <td>Total</td>
-        <td>{totalSPAdds} x {totalSPMults.toFixed(2)} = <strong>{totalSPCost}</strong></td>
+        <td
+          >{totalSPAdds} x {totalSPMults.toFixed(2)} =
+          <strong>{totalSPCost}</strong></td
+        >
         <td />
       </tr>
     </tbody>
