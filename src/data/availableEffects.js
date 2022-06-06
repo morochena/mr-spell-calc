@@ -17,6 +17,7 @@ export const createElement = (tier) => {
   return tier + 2;
 }
 
+
 export const movementCondition = (tier) => {
   switch(tier){
     case 1:
@@ -38,6 +39,30 @@ export const sound = (tier) => {
     case 3:
     default:
         return 12;
+  }
+}
+
+export const plague = (tier) => {
+  switch(tier){
+    case 1:
+      return 10;
+    case 2:
+      return 12;
+    case 3:
+    default:
+        return 15;
+  }
+}
+
+export const madness = (tier) => {
+  switch(tier){
+    case 1:
+      return 20;
+    case 2:
+      return 25;
+    case 3:
+    default:
+        return 30;
   }
 }
 
@@ -121,6 +146,19 @@ export const availableEffects = [
   { name: "Warp Light", domains: ["Air","Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "hides something or causes it to glow, or reveal something visible elsewhere in range, in an area [tier] meters cubed. If used to hide or become invisible, gives a disavdantage to finding the target" },
   { name: "Illusion", domains: ["Illusion"], modifierType: 'add', amount: 3, hasTiers: true, description: "create a ficticious image inside a bounding box of [tier] meters cubed" },
   
+  { name: "Warp Space", domains: ["Sorcery"], modifierType: 'add', amount: 5, hasTiers: false, description: "connects two points within range with a portal" },
+  { name: "Warp Weight", domains: ["Sorcery"], modifierType: 'add', amount: 4, hasTiers: true, description: "changes its weight by half or double [tier] times, which means it can be pushed as if it was lighter/heavier" },
+  { name: "Warp Size", domains: ["Sorcery","Nature"], modifierType: 'add', amount: 8, hasTiers: true, description: "changes its size by half or double [tier] times, changing the creature's size rating up or down by [tier]" },
+  
+  { name: "Cure Disease", domains: ["Holy","Nature"], modifierType: 'add', amount: 4, hasTiers: false, description: "Automatically count as a passed medical check against a disease" },
+  { name: "Cure Infection", domains: ["Holy","Water"], modifierType: 'add', amount: 4, hasTiers: false, description: "Automatically count as a passed medical check against an infection" },
+  { name: "Cure Disease", domains: ["Necromancy"], modifierType: 'add', amount: 4, hasTiers: false, description: "Automatically count as a passed medical check against a disease but the target loses 1d10 Body points as their  infected cells and the ones around it become devoid of life" },
+  { name: "Cure Infection", domains: ["Necromancy"], modifierType: 'add', amount: 4, hasTiers: false, description: "Automatically count as a passed medical check against an infection but the target loses 1d10 Body points as their  infected cells and the ones around it become devoid of life" },
+  
+  { name: "Induce Plague", domains: ["Necromancy","Holy"], modifierType: 'function', amount: 'plague', hasTiers: true, maxTier:3, description: "must make a Physique - Constitution  or Lore Medicine check  of difficulty {plague([tier])} at their next rest or be infected with Disease as if they have just been exposed to it" },
+  
+  { name: "Induce Madness", domains: ["Mind"], modifierType: 'function', amount: 'madness', hasTiers: true, maxTier:3, description: "Makes an immediate roll of Willpower - Self Control of diffculty {Math.ceil(madness([tier])/2)} or suffers a Madness attack as if they had a Madness of [tier]" },
+
   { name: "Light", domains: ["Holy","Fire","Necromancy","Sorcery","Illusion"], modifierType: 'add', amount: 1, hasTiers: true, description: "illuminates {light([tier])}" },
   { name: "Noise", domains: ["Holy","Fire","Necromancy","Sorcery","Illusion","Nature","Air","Water","Earth"], modifierType: 'add', amount: 1, hasTiers: true, description: "causes noise {noise([tier])}" },
   

@@ -12,7 +12,7 @@
   } from "../data/availableModifiers.js";
   import { get } from "svelte/store";
 
-  import { createElement, movementCondition, geas, sound } from "../data/availableEffects.js";
+  import { createElement, movementCondition, geas, sound, plague, madness } from "../data/availableEffects.js";
 
   const runModifier = (modifier) => {
     // evaluates eg. splitModifier(tier)
@@ -167,8 +167,8 @@
     <div>
       <p>
         {$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier}
-          {calculateDescription(modifier)} and&nbsp;
-        {/each} the target {#each selectedEffectValues as effect} {calculateDescription(effect)}.&nbsp; {/each}
+          {calculateDescription(modifier, $SPCost)} and&nbsp;
+        {/each} the target {#each selectedEffectValues as effect} {calculateDescription(effect, $SPCost)}.&nbsp; {/each}
       </p>
     </div>
   </div>
@@ -188,7 +188,7 @@
           <td>{modifier.name}</td>
           <td>{calculateCostText(modifier)}</td>
           <td>{modifier.tier}</td>
-          <td>{calculateDescription(modifier)}</td>
+          <td>{calculateDescription(modifier, $SPCost)}</td>
           <td>{modifier.notes}</td>
         </tr>
       {/each}
@@ -197,7 +197,7 @@
           <td>{effect.name}</td>
           <td>{calculateCostText(effect)}</td>
           <td>{effect.tier}</td>
-          <td>{calculateDescription(effect)}</td>
+          <td>{calculateDescription(effect, $SPCost)}</td>
           <td>{effect.notes}</td>
         </tr>
       {/each}

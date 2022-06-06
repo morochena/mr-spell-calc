@@ -4,7 +4,8 @@
   import { selectedEffects } from "../stores/selectedEffects.js";
   import { selectedDomain } from "../stores/selectedMeta.js";
   import {calculateDescription } from "../utils/CalcDescription.js";
-  
+  import { SPCost } from "../stores/selectedMeta.js";
+
   let selectedEffect = null;
   let selectedDescription = null;
   let selectedDomainValue = null;
@@ -101,7 +102,7 @@
             </button>
           </td>
           <td>
-            {calculateDescription(effect)}
+            {calculateDescription(effect, $SPCost)}
           </td>
         </tr>
       {/each}

@@ -3,15 +3,16 @@ import { get } from 'svelte/store';
 import * as meta from "../stores/selectedMeta.js";
 import * as modifiers from "../stores/selectedModifiers.js";
 import * as effects from "../stores/selectedEffects.js";
+import {plague, madness} from '../data/availableEffects.js';
 
-
-  function calcSpellResist() {
-    return calcSpellCost() + 5;
+  function calcSpellResist(SPCost) {
+    console.log(SPCost)
+    return calcSpellCost(SPCost) + 5;
   }
   
-  function calcSpellCost() {
-    const {  SPCost } = meta;
-    const SP = get(SPCost);
+  function calcSpellCost(SPCost) {
+      console.log(SPCost);
+    const SP = SPCost;
     let cost = Math.ceil(SP/10.0) + 1;
 
     const { selectedModifiers } = modifiers;
@@ -307,8 +308,7 @@ function coneHeightCalc(tier,notes){
 }
 
 
-export function calculateDescription(effect) {
-
+export function calculateDescription(effect, SPCost) {
   const { name, description, selectedDomain, selectedMode } = meta;
 
   const spell = {
@@ -327,18 +327,20 @@ export function calculateDescription(effect) {
       evalString = evalString.replace("tier", "effect.tier");
       evalString = evalString.replace("notes", "effect.notes");
       evalString = evalString.replace("domain", "spell.domain");
-      evalString = evalString.replace("cost", "calcSpellCost()");
-      evalString = evalString.replace("resist", "calcSpellResist()");
+      evalString = evalString.replace("cost", calcSpellCost(SPCost));
+      evalString = evalString.replace("resist", calcSpellResist(SPCost));
       evalString = evalString.replace("[", "");
       evalString = evalString.replace("]", "");
       let evalResult = ""
-      
+
+      console.log(evalString)
+    
       try { 
        evalResult = eval(evalString);
       } catch (error) {
         evalResult = `Error ${error}`;
       }
-
+      console.log(evalResult);
       formattedDescription = formattedDescription.replace(e, evalResult);
     });
   }
