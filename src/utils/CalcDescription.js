@@ -353,7 +353,7 @@ export function calculateDescription(effect, SPCost) {
       evalString = evalString.replace("{", "");
       evalString = evalString.replace("}", "");
       evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
-      Object.keys(funcMatch).forEach(key => {
+      Object.keys(functionMap).forEach(key => {
         console.log(functionMap)
         // console.log(rangeMeters.name)
         // console.log(functionMap[key].name)
