@@ -85,6 +85,73 @@ function elementAmount(tier,domain){
     }
 }
 
+function movementConditionDesc(tier){
+    switch(tier){
+        case 1:
+          return "unable to Run";
+        case 2:
+          return "only able to use 1 Move action a turn";
+        case 3:
+        default:
+            return "unable to move at all";
+      }
+}
+function thoughts(tier){
+    switch(tier){
+        case 1:
+          return "surface thoughts";
+        case 2:
+          return "deeper thoughts";
+        case 3:
+            return "memories"
+        default:
+            return "subconscious";
+      }
+}
+
+function comms(tier){
+    switch(tier){
+        case 1:
+          return "words";
+        case 2:
+          return "music, sounds, words or images";
+        case 3:
+            return "dreams"
+        default:
+            return "subconscious";
+      }
+}
+
+function temporaryBodySideEffect(domain){
+    switch (domain) {
+        case "Holy":
+            return "starts glowing with holy protection";
+        case "Earth":
+            return "hardens with rocks, reducing their move by 1m, run by 2m and sprint by 4m";
+        case "Nature":
+            return " grows thicker skin and starts resembling a beast with natural toughness";
+        case "Necromancy":
+            return "grows painful bony protrusions and leathery fur, harming their mind by 1d10 points once upon spell cast, the points come back";
+        default:
+            return "applies damaging condition";
+    }
+}
+
+function damagingCondition(domain){
+    switch (domain) {
+        case "Fire":
+            return "catches on Fire, Burning";
+        case "Water":
+            return "becomes Poisoned, losing";
+        case "Air":
+            return "starts Suffocating, losing";
+        case "Necromancy":
+            return "starts Bleeding, losing";
+        default:
+            return "applies damaging condition";
+    }
+}
+
 function thwartStat(domain){
     switch (domain) {
         case "Fire":
@@ -196,6 +263,8 @@ export function calculateDescription(effect) {
       evalString = evalString.replace("tier", "effect.tier");
       evalString = evalString.replace("notes", "effect.notes");
       evalString = evalString.replace("domain", "spell.domain");
+      evalString = evalString.replace("cost", "calcSpellCost()");
+      evalString = evalString.replace("resist", "calcSpellResist()");
       evalString = evalString.replace("[", "");
       evalString = evalString.replace("]", "");
       let evalResult = eval(evalString);
