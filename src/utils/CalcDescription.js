@@ -253,6 +253,7 @@ const rangeMeters = (tier) => {
   return meters;
 }
 
+
 const aoeArea = (tier) => {
   let area = 0;
 
@@ -305,9 +306,31 @@ function coneHeightCalc(tier, notes) {
   }
 }
 
+// this is used to dynamically evaluate functions while maintaining their name in minified builds
+const functionMap = {
+  'calcComponentCost': calcComponentCost,
+  'elementAmount': elementAmount,
+  'movementConditionDesc': movementConditionDesc,
+  'light': light,
+  'noise': noise,
+  'sound': sound,
+  'volume': volume,
+  'sense': sense,
+  'thoughts': thoughts,
+  'comms': comms,
+  'temporaryBodySideEffect': temporaryBodySideEffect,
+  'damagingCondition': damagingCondition,
+  'thwartStat': thwartStat,
+  'rangeMeters': rangeMeters,
+  'aoeArea': aoeArea,
+  'radiusCalc': radiusCalc,
+  'rectWidthCalc': rectWidthCalc,
+  'coneHeightCalc': coneHeightCalc
+}
 
 export function calculateDescription(effect, SPCost) {
   const { name, description, selectedDomain, selectedMode } = meta;
+
 
   const spell = {
     name: get(name),
@@ -334,6 +357,7 @@ export function calculateDescription(effect, SPCost) {
       try {
         evalResult = eval(evalString);
       } catch (error) {
+        console.warn('evalMatch: could not eval:', evalString);
         evalResult = `Error ${error}`;
       }
       formattedDescription = formattedDescription.replace(e, evalResult);
@@ -347,13 +371,18 @@ export function calculateDescription(effect, SPCost) {
       let evalString = e;
       evalString = evalString.replace("{", "");
       evalString = evalString.replace("}", "");
-      if(spell.domain)
+      if (spell.domain)
         evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
+
+      Object.keys(functionMap).forEach(key => {
+        evalString = evalString.replace(key, functionMap[key].name);
+      })
       let evalResult = ""
 
       try {
         evalResult = eval(evalString);
       } catch (error) {
+        console.warn('funcMatch: could not eval:', evalString);
         evalResult = `Error ${error}`;
       }
 
