@@ -29,10 +29,7 @@ function calculateAllowedEffects(selectedMods, selectedEffects) {
 
     if (effect.prerequisite) {
       effect.prerequisite.forEach(prerequisite => {
-        if (!selectedMods.find(m => m.name == prerequisite)) {
-          disabled = true;
-        }
-        if (!selectedEffects.find(m => m.name == prerequisite)) {
+        if (!selectedMods.concat(selectedEffects).find(m => m.name == prerequisite)) {
           disabled = true;
         }
       })
@@ -40,10 +37,7 @@ function calculateAllowedEffects(selectedMods, selectedEffects) {
 
     if (effect.incompatible) {
       effect.incompatible.forEach(incompatible => {
-        if (selectedMods.find(m => m.name == incompatible)) {
-          disabled = true;
-        }
-        if (selectedEffects.find(m => m.name == incompatible)) {
+        if (selectedMods.concat(selectedEffects).find(m => m.name == incompatible)) {
           disabled = true;
         }
       })
@@ -65,10 +59,7 @@ function calculateAllowedModifiers(selectedMods, selectedEffects) {
 
     if (modifier.prerequisite) {
       modifier.prerequisite.forEach(prerequisite => {
-        if (!selectedMods.find(m => m.name == prerequisite)) {
-          disabled = true;
-        }
-        if (!selectedEffects.find(m => m.name == prerequisite)) {
+        if (!selectedMods.concat(selectedEffects).find(m => m.name == prerequisite)) {
           disabled = true;
         }
       })
@@ -76,10 +67,7 @@ function calculateAllowedModifiers(selectedMods, selectedEffects) {
 
     if (modifier.incompatible) {
       modifier.incompatible.forEach(incompatible => {
-        if (selectedMods.find(m => m.name == incompatible)) {
-          disabled = true;
-        }
-        if (selectedEffects.find(m => m.name == incompatible)) {
+        if (selectedMods.concat(selectedEffects).find(m => m.name == incompatible)) {
           disabled = true;
         }
       })
