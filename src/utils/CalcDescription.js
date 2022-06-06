@@ -308,7 +308,24 @@ function coneHeightCalc(tier, notes) {
 
 // this is used to dynamically evaluate functions while maintaining their name in minified builds
 const functionMap = {
+  'calcComponentCost': calcComponentCost,
+  'elementAmount': elementAmount,
+  'movementConditionDesc': movementConditionDesc,
+  'light': light,
+  'noise': noise,
+  'sound': sound,
+  'volume': volume,
+  'sense': sense,
+  'thoughts': thoughts,
+  'comms': comms,
+  'temporaryBodySideEffect': temporaryBodySideEffect,
+  'damagingCondition': damagingCondition,
+  'thwartStat': thwartStat,
   'rangeMeters': rangeMeters,
+  'aoeArea': aoeArea,
+  'radiusCalc': radiusCalc,
+  'rectWidthCalc': rectWidthCalc,
+  'coneHeightCalc': coneHeightCalc
 }
 
 export function calculateDescription(effect, SPCost) {
