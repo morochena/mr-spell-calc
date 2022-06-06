@@ -313,7 +313,7 @@ const functionMap = {
 
 export function calculateDescription(effect, SPCost) {
   const { name, description, selectedDomain, selectedMode } = meta;
-  functionMap
+
 
   const spell = {
     name: get(name),
@@ -355,6 +355,9 @@ export function calculateDescription(effect, SPCost) {
       evalString = evalString.replace("{", "");
       evalString = evalString.replace("}", "");
       evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
+      Object.keys(functionMap).forEach(key => {
+        evalString = evalString.replace(key, functionMap[key].name);
+      })
       let evalResult = ""
 
       try {
