@@ -11,13 +11,6 @@
     componentModifier,
   } from "../data/availableModifiers.js";
 
-  // cool hack
-  splitModifier;
-  rangeModifier;
-  aoeModifier;
-  lastingModifier;
-  componentModifier;
-
   import { get } from "svelte/store";
 
   import { createElement, movementCondition, geas, sound, plague, madness } from "../data/availableEffects.js";
@@ -25,12 +18,20 @@
   const runModifier = (modifier) => {
     // evaluates eg. splitModifier(tier)
 
-    if (modifier.name.includes("Lasting")) {
-      return eval(`${modifier.amount}(${modifier.tier},'${modifier.name}')`);
+    switch (modifier.amount) {
+      case "splitModifier":
+        return splitModifier(modifier.tier);
+      case "rangeModifier":
+        return rangeModifier(modifier.tier);
+      case "aoeModifier":
+        return aoeModifier(modifier.tier);
+      case "lastingModifier":
+        return lastingModifier(modifier.tier, modifier.name);
+      case "componentModifier":
+        return componentModifier(modifier.tier);
     }
-    if (name) {
-      return eval(`${modifier.amount}(${modifier.tier})`);
-    }
+
+    console.log("modifier case not handled: ", modifier.amount);
 
     return 0;
   };
