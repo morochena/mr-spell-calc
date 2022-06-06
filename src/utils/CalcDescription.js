@@ -3,306 +3,304 @@ import { get } from 'svelte/store';
 import * as meta from "../stores/selectedMeta.js";
 import * as modifiers from "../stores/selectedModifiers.js";
 import * as effects from "../stores/selectedEffects.js";
-import {plague, madness} from '../data/availableEffects.js';
+import { plague, madness } from '../data/availableEffects.js';
 
-  function calcSpellResist(SPCost) {
-    console.log(SPCost)
-    return calcSpellCost(SPCost) + 5;
+function calcSpellResist(SPCost) {
+  return calcSpellCost(SPCost) + 5;
+}
+
+function calcSpellCost(SPCost) {
+  const SP = SPCost;
+  let cost = Math.ceil(SP / 10.0) + 1;
+
+  const { selectedModifiers } = modifiers;
+  const modList = get(selectedModifiers)
+  if (modList.filter(mod => mod.name === "Exhausting").length > 0) {
+    cost += 1;
   }
-  
-  function calcSpellCost(SPCost) {
-      console.log(SPCost);
-    const SP = SPCost;
-    let cost = Math.ceil(SP/10.0) + 1;
-
-    const { selectedModifiers } = modifiers;
-    const modList = get(selectedModifiers)
-    if (modList.filter(mod => mod.name === "Exhausting").length > 0) {
-      cost +=1;
-    }
-    if (modList.filter(mod => mod.name === "Uncomplicated").length > 0) {
-      cost -=1;
-    }
-
-
-    return cost;
+  if (modList.filter(mod => mod.name === "Uncomplicated").length > 0) {
+    cost -= 1;
   }
 
-  function calcComponentCost(tier) {
-    let cost = 1;
-    if(tier < 5)
-        cost = tier *25;
-    else if(tier < 9)
-        cost = 100 + (tier-4) * 100;
-    else
-        cost = 500 + (tier-8) * 2000;
-    return cost;
+
+  return cost;
+}
+
+function calcComponentCost(tier) {
+  let cost = 1;
+  if (tier < 5)
+    cost = tier * 25;
+  else if (tier < 9)
+    cost = 100 + (tier - 4) * 100;
+  else
+    cost = 500 + (tier - 8) * 2000;
+  return cost;
+}
+
+function elementAmount(tier, domain) {
+  switch (domain) {
+    case "Fire":
+      switch (tier) {
+        case 1:
+          return "A spark of flames (300 Celcius)"
+        case 2:
+          return "a roaring fire (750 Celcius)"
+        default:
+        case 3:
+          return "a blazing inferno (1200 Celcius), automatically applying On Fire Condition"
+      }
+    case "Water":
+      switch (tier) {
+        case 1:
+          return "a drop of water"
+        case 2:
+          return "a liter of water"
+        default:
+        case 3:
+          return "20 liters of water"
+      }
+    case "Earth":
+      switch (tier) {
+        case 1:
+          return "a handful of dirt"
+        case 2:
+          return "1kg of top soil or rock"
+        default:
+        case 3:
+          return "20kg of top soil or rock"
+      }
+    case "Air":
+      switch (tier) {
+        case 1:
+          return "a gasp of air"
+        case 2:
+          return "a cubic meter of Air"
+        default:
+        case 3:
+          return "10 cubic meters of Air"
+      }
+    default:
+      return "Element";
   }
-
-function elementAmount(tier,domain){
-    switch (domain) {
-        case "Fire":
-            switch(tier){
-                case 1:
-                    return "A spark of flames (300 Celcius)"
-                case 2:
-                    return "a roaring fire (750 Celcius)"
-                default:
-                case 3:
-                    return "a blazing inferno (1200 Celcius), automatically applying On Fire Condition"
-            }
-        case "Water":
-            switch(tier){
-                case 1:
-                    return "a drop of water"
-                case 2:
-                    return "a liter of water"
-                default:
-                case 3:
-                    return "20 liters of water"
-            }
-        case "Earth":
-            switch(tier){
-                case 1:
-                    return "a handful of dirt"
-                case 2:
-                    return "1kg of top soil or rock"
-                default:
-                case 3:
-                    return "20kg of top soil or rock"
-            }
-        case "Air":
-            switch(tier){
-                case 1:
-                    return "a gasp of air"
-                case 2:
-                    return "a cubic meter of Air"
-                default:
-                case 3:
-                    return "10 cubic meters of Air"
-            }
-        default:
-            return "Element";
-    }
 }
 
-function movementConditionDesc(tier){
-    switch(tier){
-        case 1:
-          return "unable to Run";
-        case 2:
-          return "only able to use 1 Move action a turn";
-        case 3:
-        default:
-            return "unable to move at all";
-      }
+function movementConditionDesc(tier) {
+  switch (tier) {
+    case 1:
+      return "unable to Run";
+    case 2:
+      return "only able to use 1 Move action a turn";
+    case 3:
+    default:
+      return "unable to move at all";
+  }
 }
-function light(tier){
-    if(tier == 1){
-        return "a small room with light";
-    }
-    else if(tier < 5){
-        return "as bright as daylight";
-    }
-    else if(tier < 10){
-        return "intensely, causing blindness for 1 round for everyone looking at the light in a previously dark room at a distance of " + 10 * (tier - 4) + "m";
-    }
-    else{
-        return "intensely, causing blindness for 1 round for everyone looking at the light in a previously dark room at a distance of " + 10 * (tier - 4) + "m and in a previously lit room to a distance of " + 10 * (tier - 9) + "m";
-    }
-}
-
-function noise(tier){
-    if(tier < 4){
-        return 90 + 10*tier + " DB";
-    }
-    else if(tier < 8){
-        return 110 + 5*tier + " DB";
-    }
-    else {
-        return ">150DB causing deafness for 1 round at a distance of " + 10 * (tier - 7) + "m";
-    }
+function light(tier) {
+  if (tier == 1) {
+    return "a small room with light";
+  }
+  else if (tier < 5) {
+    return "as bright as daylight";
+  }
+  else if (tier < 10) {
+    return "intensely, causing blindness for 1 round for everyone looking at the light in a previously dark room at a distance of " + 10 * (tier - 4) + "m";
+  }
+  else {
+    return "intensely, causing blindness for 1 round for everyone looking at the light in a previously dark room at a distance of " + 10 * (tier - 4) + "m and in a previously lit room to a distance of " + 10 * (tier - 9) + "m";
+  }
 }
 
-function sound(tier){
-    switch(tier){
-        case 1:
-          return "heard during the spell casting or preparation";
-        case 2:
-          return "that you can conceptualize in your mind during spell casting or preparation";
-        case 3:
-        default:
-            return "Generates entirely new based off some idea ";
-      }
+function noise(tier) {
+  if (tier < 4) {
+    return 90 + 10 * tier + " DB";
+  }
+  else if (tier < 8) {
+    return 110 + 5 * tier + " DB";
+  }
+  else {
+    return ">150DB causing deafness for 1 round at a distance of " + 10 * (tier - 7) + "m";
+  }
 }
 
-function volume(tier){
-    switch(tier){
-        case 1:
-          return "50 DB";
-        case 2:
-          return "100 DB";
-        case 3:
-        default:
-            return "120 DB";
-      }
+function sound(tier) {
+  switch (tier) {
+    case 1:
+      return "heard during the spell casting or preparation";
+    case 2:
+      return "that you can conceptualize in your mind during spell casting or preparation";
+    case 3:
+    default:
+      return "Generates entirely new based off some idea ";
+  }
 }
 
-function sense(tier){
-    switch(tier){
-        case 1:
-          return "nonspecific";
-        case 2:
-          return ", a category of";
-        case 3:
-            return ", specifically"
-        default:
-            return "nonsense";
-      }
-}
-function thoughts(tier){
-    switch(tier){
-        case 1:
-          return "surface thoughts";
-        case 2:
-          return "deeper thoughts";
-        case 3:
-            return "memories"
-        default:
-            return "subconscious";
-      }
+function volume(tier) {
+  switch (tier) {
+    case 1:
+      return "50 DB";
+    case 2:
+      return "100 DB";
+    case 3:
+    default:
+      return "120 DB";
+  }
 }
 
-function comms(tier){
-    switch(tier){
-        case 1:
-          return "words";
-        case 2:
-          return "music, sounds, words or images";
-        case 3:
-            return "dreams"
-        default:
-            return "subconscious";
-      }
+function sense(tier) {
+  switch (tier) {
+    case 1:
+      return "nonspecific";
+    case 2:
+      return ", a category of";
+    case 3:
+      return ", specifically"
+    default:
+      return "nonsense";
+  }
+}
+function thoughts(tier) {
+  switch (tier) {
+    case 1:
+      return "surface thoughts";
+    case 2:
+      return "deeper thoughts";
+    case 3:
+      return "memories"
+    default:
+      return "subconscious";
+  }
 }
 
-function temporaryBodySideEffect(domain){
-    switch (domain) {
-        case "Holy":
-            return "starts glowing with holy protection";
-        case "Earth":
-            return "hardens with rocks, reducing their move by 1m, run by 2m and sprint by 4m";
-        case "Nature":
-            return " grows thicker skin and starts resembling a beast with natural toughness";
-        case "Necromancy":
-            return "grows painful bony protrusions and leathery fur, harming their mind by 1d10 points once upon spell cast, the points come back";
-        default:
-            return "applies damaging condition";
-    }
+function comms(tier) {
+  switch (tier) {
+    case 1:
+      return "words";
+    case 2:
+      return "music, sounds, words or images";
+    case 3:
+      return "dreams"
+    default:
+      return "subconscious";
+  }
 }
 
-function damagingCondition(domain){
-    switch (domain) {
-        case "Fire":
-            return "catches on Fire, Burning";
-        case "Water":
-            return "becomes Poisoned, losing";
-        case "Air":
-            return "starts Suffocating, losing";
-        case "Necromancy":
-            return "starts Bleeding, losing";
-        default:
-            return "applies damaging condition";
-    }
+function temporaryBodySideEffect(domain) {
+  switch (domain) {
+    case "Holy":
+      return "starts glowing with holy protection";
+    case "Earth":
+      return "hardens with rocks, reducing their move by 1m, run by 2m and sprint by 4m";
+    case "Nature":
+      return " grows thicker skin and starts resembling a beast with natural toughness";
+    case "Necromancy":
+      return "grows painful bony protrusions and leathery fur, harming their mind by 1d10 points once upon spell cast, the points come back";
+    default:
+      return "applies damaging condition";
+  }
 }
 
-function thwartStat(domain){
-    switch (domain) {
-        case "Fire":
-            return "Dexterity";
-        case "Water":
-            return "Strength";
-        case "Earth":
-            return "Strength"
-        case "Air":
-            return "Dexterity";
-        case "Necromancy":
-            return "Empathy";
-        case "Holy":
-            return "Empathy";
-        case "Mind":
-            return "Intelligence";
-        case "Illusion":
-            return "Intelligence";
-        default:
-            return "Statistic";
-    }
+function damagingCondition(domain) {
+  switch (domain) {
+    case "Fire":
+      return "catches on Fire, Burning";
+    case "Water":
+      return "becomes Poisoned, losing";
+    case "Air":
+      return "starts Suffocating, losing";
+    case "Necromancy":
+      return "starts Bleeding, losing";
+    default:
+      return "applies damaging condition";
+  }
+}
+
+function thwartStat(domain) {
+  switch (domain) {
+    case "Fire":
+      return "Dexterity";
+    case "Water":
+      return "Strength";
+    case "Earth":
+      return "Strength"
+    case "Air":
+      return "Dexterity";
+    case "Necromancy":
+      return "Empathy";
+    case "Holy":
+      return "Empathy";
+    case "Mind":
+      return "Intelligence";
+    case "Illusion":
+      return "Intelligence";
+    default:
+      return "Statistic";
+  }
 }
 
 const rangeMeters = (tier) => {
-    let meters = 0
-  
-    for (let i = 0; i < tier; i++) {
-      if (i < 5) {
-        meters += 10
-      } else if (i < 10) {
-        meters += 100
-      } else {
-        meters += 1000
-      }
-    }
-  
-    return meters;
-  }
-  
- const aoeArea = (tier) => {
-    let area = 0;
-  
-    for (let i = 0; i < tier; i++) {
-      if (i < 10) {
-        area += 10
-      } else if (i < 20) {
-        area += 100
-      } else if (i < 30) {
-        area += 1000
-      } else {
-        area += 10000
-      }
-    }
+  let meters = 0
 
-    // double area if aura is selected
-    const { selectedModifiers } = modifiers;
-    const modList = get(selectedModifiers)
-    if (modList.filter(mod => mod.name === "Aura").length > 0) {
-      area *= 2;
+  for (let i = 0; i < tier; i++) {
+    if (i < 5) {
+      meters += 10
+    } else if (i < 10) {
+      meters += 100
+    } else {
+      meters += 1000
     }
-
-    return area;
   }
 
-function radiusCalc(tier){
-    let area = aoeArea(tier);
-    let radius = Math.sqrt(area / Math.PI);
-    
-    return Math.ceil(radius);
+  return meters;
 }
 
-function rectWidthCalc(tier,notes){
-    let area = aoeArea(tier);
+const aoeArea = (tier) => {
+  let area = 0;
+
+  for (let i = 0; i < tier; i++) {
+    if (i < 10) {
+      area += 10
+    } else if (i < 20) {
+      area += 100
+    } else if (i < 30) {
+      area += 1000
+    } else {
+      area += 10000
+    }
+  }
+
+  // double area if aura is selected
+  const { selectedModifiers } = modifiers;
+  const modList = get(selectedModifiers)
+  if (modList.filter(mod => mod.name === "Aura").length > 0) {
+    area *= 2;
+  }
+
+  return area;
+}
+
+function radiusCalc(tier) {
+  let area = aoeArea(tier);
+  let radius = Math.sqrt(area / Math.PI);
+
+  return Math.ceil(radius);
+}
+
+function rectWidthCalc(tier, notes) {
+  let area = aoeArea(tier);
   try {
-    let width = area/parseInt(notes);
+    let width = area / parseInt(notes);
     return Math.ceil(width);
   } catch (error) {
     return "Enter a Number into notes";
   }
 }
 
-function coneHeightCalc(tier,notes){
-    let area = aoeArea(tier);
-    try {
-        let height = 2 * area / parseInt(notes);
-        return Math.ceil(height);
-    } catch (error) {
+function coneHeightCalc(tier, notes) {
+  let area = aoeArea(tier);
+  try {
+    let height = 2 * area / parseInt(notes);
+    return Math.ceil(height);
+  } catch (error) {
     return "Enter a Number into notes";
   }
 }
@@ -333,14 +331,11 @@ export function calculateDescription(effect, SPCost) {
       evalString = evalString.replace("]", "");
       let evalResult = ""
 
-      console.log(evalString)
-    
-      try { 
-       evalResult = eval(evalString);
+      try {
+        evalResult = eval(evalString);
       } catch (error) {
         evalResult = `Error ${error}`;
       }
-      console.log(evalResult);
       formattedDescription = formattedDescription.replace(e, evalResult);
     });
   }
@@ -355,10 +350,9 @@ export function calculateDescription(effect, SPCost) {
       if(spell.domain)
         evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
       let evalResult = ""
-      try { 
-      console.log(evalString);
-       evalResult = eval(evalString);
-      
+
+      try {
+        evalResult = eval(evalString);
       } catch (error) {
         evalResult = `Error ${error}`;
       }

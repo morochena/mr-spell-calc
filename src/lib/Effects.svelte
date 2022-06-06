@@ -3,8 +3,9 @@
   import { availableEffects } from "../data/availableEffects.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
   import { selectedDomain } from "../stores/selectedMeta.js";
-  import {calculateDescription } from "../utils/CalcDescription.js";
+  import { calculateDescription } from "../utils/CalcDescription.js";
   import { SPCost } from "../stores/selectedMeta.js";
+  import { allowedEffects } from "../stores/allowedModifiersAndEffects.js";
 
   let selectedEffect = null;
   let selectedDescription = null;
@@ -39,8 +40,8 @@
       bind:value={selectedEffect}
       class="mt-1 block w-96 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
     >
-      {#each availableEffects as effect}
-        <option value={effect} disabled={!effect.domains.includes($selectedDomain)}>
+      {#each $allowedEffects as effect}
+        <option value={effect} disabled={effect.disabled}>
           {effect.name}
         </option>
       {/each}
@@ -77,7 +78,7 @@
                 bind:value={effect.tier}
                 class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
               >
-                {#each range(1, effect.maxTier+1 || 50, 1) as i}
+                {#each range(1, effect.maxTier + 1 || 50, 1) as i}
                   <option value={i}>{i}</option>
                 {/each}
               </select>
