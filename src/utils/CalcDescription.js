@@ -237,7 +237,7 @@ function thwartStat(domain) {
   }
 }
 
-const rangeMeters = (tier) => {
+const rangeMeters2 = (tier) => {
   let meters = 0
 
   for (let i = 0; i < tier; i++) {
@@ -307,7 +307,7 @@ function coneHeightCalc(tier, notes) {
 
 // this is used to dynamically evaluate functions while maintaining their name in minified builds
 const functionMap = {
-  'rangeMeters': rangeMeters,
+  'rangeMeters': rangeMeters2,
 }
 
 export function calculateDescription(effect, SPCost) {
@@ -353,7 +353,10 @@ export function calculateDescription(effect, SPCost) {
       evalString = evalString.replace("}", "");
       evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
       Object.keys(functionMap).forEach(fun => {
+        console.log(fun)
+        console.log('before', evalString)
         evalString = evalString.replace(fun, functionMap[fun].name);
+        console.log('after', evalString)
       })
 
       let evalResult = ""
