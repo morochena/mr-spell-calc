@@ -252,7 +252,6 @@ const rangeMeters = (tier) => {
 
   return meters;
 }
-rangeMeters;
 
 
 const aoeArea = (tier) => {
@@ -314,6 +313,7 @@ const functionMap = {
 
 export function calculateDescription(effect, SPCost) {
   const { name, description, selectedDomain, selectedMode } = meta;
+  functionMap
 
   const spell = {
     name: get(name),
