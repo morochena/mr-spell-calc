@@ -371,7 +371,9 @@ export function calculateDescription(effect, SPCost) {
       let evalString = e;
       evalString = evalString.replace("{", "");
       evalString = evalString.replace("}", "");
-      evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
+      if (spell.domain)
+        evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
+
       Object.keys(functionMap).forEach(key => {
         evalString = evalString.replace(key, functionMap[key].name);
       })
