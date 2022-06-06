@@ -102,8 +102,8 @@ export const componentModifier = (tier) => {
 }
 
 export const availableModifiers = [
-  { name: "Ray", hasTiers: false, incompatible: ["Area of Effect (Sphere)", "Area of Effect (Rectangle)", "Area of Effect (Cone)", "Area of Effect (Custom)"], prerequisite: ["Range"], modifierType: 'reduce', amount: 3, description: "the targets must be in direct line of sight for the character for the entire duration of the spell or the spell fails" },
-  { name: "Aura", hasTiers: false, incompatible: ["Damage", "Attack"], prerequisite: ["Area of Effect (Sphere)", "Area of Effect (Rectangle)", "Area of Effect (Cone)", "Area of Effect (Custom)"], modifierType: 'add', amount: 2, description: " is an Aura" },
+  { name: "Ray", hasTiers: false, incompatible: ["Area of Effect"], prerequisite: ["Range"], modifierType: 'reduce', amount: 3, description: "the targets must be in direct line of sight for the character for the entire duration of the spell or the spell fails" },
+  { name: "Aura", hasTiers: false, incompatible: ["Damage", "Attack"], prerequisite: ["Area of Effect"], modifierType: 'add', amount: 2, description: " is an Aura" },
   { name: "Reaction", hasTiers: false, incompatible: ["Charge Up"], modifierType: 'add', amount: 2, description: "as a Reaction" },
   { name: "Exhausting", hasTiers: false, incompatible: ["Uncomplicated"], modifierType: 'reduce', amount: 4, description: "" },
   { name: "Uncomplicated", hasTiers: false, incompatible: ["Exhausting"], modifierType: 'add', amount: 4, description: "" },
@@ -125,9 +125,9 @@ export const availableModifiers = [
   { name: "Lasting (Hours)", incompatible: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Days)", "Lasting (Weeks)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", maxTier: 24, description: "lasts for [tier] hours" },
   { name: "Lasting (Days)", incompatible: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Hours)", "Lasting (Weeks)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", maxTier: 7, description: "lasts for [tier] days" },
   { name: "Lasting (Weeks)", incompatible: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Hours)", "Lasting (Days)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", description: "lasts for [tier] weeks" },
-  { name: "Delay", prerequisite: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Hours)", "Lasting (Days)", "Lasting (Weeks)"], hasTiers: false, modifierType: 'multiply', amount: 0.333, description: "doesn't activate immediately, but instead goes off after half the total time the spell lasts for" },
-  { name: "Concentration", prerequisite: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Hours)", "Lasting (Days)", "Lasting (Weeks)"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Concentration" },
-  { name: "Channelling", prerequisite: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Hours)", "Lasting (Days)", "Lasting (Weeks)"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Channelling" },
+  { name: "Delay", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'multiply', amount: 0.333, description: "doesn't activate immediately, but instead goes off after half the total time the spell lasts for" },
+  { name: "Concentration", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Concentration" },
+  { name: "Channelling", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Channelling" },
   { name: "Sculpted (Immune)", hasTiers: false, modifierType: 'add', amount: 2, description: "will not target the caster" },
   { name: "Sculpted (Pre-sculpted)", hasTiers: false, modifierType: 'add', amount: 3, description: "will not target [notes]" },
   { name: "Sculpted (Sculpted)", hasTiers: false, modifierType: 'add', amount: 4, description: "will not target anyone chosen by the caster." },
