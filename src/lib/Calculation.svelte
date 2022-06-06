@@ -155,15 +155,16 @@
 
 <div class="mt-10">
   <h2 class="text-xl">Summary</h2>
-  <div class="bg-black text-white">
+  <div class="mt-2 bg-gray-700 rounded-lg py-5 px-6 mb-4 text-sm text-white mb-3">
     <div>
       <p><strong>Name:</strong> {$name}</p>
       <p><strong>Description:</strong> {$description}</p>
       <p><strong>Domain:</strong> {$selectedDomain}</p>
       <p><strong>Mode:</strong> {$selectedMode}</p>
-      <div class="text-lg">Spell Difficulty:<strong> {$SPCost}</strong></div>
-      <div class="text-lg">Mental Cost: <strong>{spellCost}</strong></div>
+      <p><strong>Spell Difficulty:</strong> {$SPCost}</p>
+      <p><strong>Mental Cost:</strong> {spellCost}</p>
     </div>
+    <hr class="my-3" />
     <div>
       <p>
         {$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier}
