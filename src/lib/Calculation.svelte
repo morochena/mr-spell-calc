@@ -12,7 +12,7 @@
   } from "../data/availableModifiers.js";
   import { get } from "svelte/store";
 
-  import { createElement, movementCondition, geas } from "../data/availableEffects.js";
+  import { createElement, movementCondition, geas, sound } from "../data/availableEffects.js";
 
   const runModifier = (modifier) => {
     // evaluates eg. splitModifier(tier)

@@ -16,12 +16,25 @@ Nature 🌳
 export const createElement = (tier) => {
   return tier + 2;
 }
+
 export const movementCondition = (tier) => {
   switch(tier){
     case 1:
       return 3;
     case 2:
       return 6;
+    case 3:
+    default:
+        return 12;
+  }
+}
+
+export const sound = (tier) => {
+  switch(tier){
+    case 1:
+      return 3;
+    case 2:
+      return 7;
     case 3:
     default:
         return 12;
@@ -47,7 +60,7 @@ export const availableEffects = [
   { name: "Attack (Targeted)", domains: ["Sorcery", "Necromancy", "Holy"], modifierType: 'add', amount: 2, hasTiers: false, description: "takes an attack which cannot be dodged that deals d10 DMG" },
   { name: "Create Element", maxTier:3, domains: ["Air", "Earth", "Fire", "Water"], modifierType: 'function', amount: 'createElement', hasTiers: true, description: "creates {elementAmount([tier],[domain])}" },
   { name: "Destroy Element", maxTier:3, domains: ["Air", "Earth", "Fire", "Water"], modifierType: 'add', amount: 1, hasTiers: true, description: "destroys {elementAmount([tier],[domain])}" },  // TODO
-  { name: "Apply Force", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Nature"], modifierType: 'add', amount: 0, hasTiers: true, description: "is moved [Tier] meters [notes]" },
+  { name: "Apply Force", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Nature"], modifierType: 'add', amount: 0, hasTiers: true, description: "is moved [tier] meters [notes]" },
   { name: "Damage", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy"], modifierType: 'add', amount: 2, hasTiers: true, description: "+[tier] DMG" },
   { name: "Damage (Armor Piercing)", domains: ["Fire", "Water", "Necromancy"], modifierType: 'add', amount: 1, hasTiers: true, description: "[tier] AP" },
   { name: "Transform", domains: ["Holy", "Water", "Air", "Earth", "Necromancy", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "turns [tier * 1000]cm^3 of [domain] into [notes]" },
@@ -94,8 +107,33 @@ export const availableEffects = [
 
   { name: "Communicate Thought", domains: ["Mind","Nature"], modifierType: 'add', amount: 3, hasTiers: true, maxTier:3, description: "communicate {comms([tier])} to the caster,talk to another living thing within range of the spell, whether that be a human, animal or any other creature. The caster and target do not need to share a language, or even be able to speak a language. If they are unaware of the caster, count as an attack against the mind with damage 1" },
 
+  { name: "Sense Magic", domains: ["Sorcery","Holy"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} magic, and only execute the rest of the spell once it's sensed" },
+  { name: "Sense Life(Animal)", domains: ["Mind","Nature"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} living things, and only execute the rest of the spell once it's sensed" },
+  { name: "Sense Gods, Good and Evil", domains: ["Necromancy","Holy"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} intent, and only execute the rest of the spell once it's sensed" },
+  { name: "Sense souls", domains: ["Nature","Necromancy"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} soul, and only execute the rest of the spell once it's sensed" },
+  { name: "Sense liquids", domains: ["Water"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} liquid, and only execute the rest of the spell once it's sensed" },
+  { name: "Sense temperature", domains: ["Fire"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} temperature, and only execute the rest of the spell once it's sensed" },
+  { name: "Sense gases", domains: ["Air"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} gas, and only execute the rest of the spell once it's sensed" },
+  { name: "Sense plants and minerals", domains: ["Nature","Earth"], modifierType: 'function', amount: 'createElement', hasTiers: true, maxTier:3, description: "Sense [notes]{sense([tier])} plants and minerals, and only execute the rest of the spell once it's sensed" },
+  { name: "End once Sensed", incompatible:["Reset once Sensed"],prerequisite:["Sense Magic", "Sense Life(Animal)", "Sense Gods, Good and Evil", "Sense souls", "Sense liquids", "Sense temperature", "Sense gases", "Sense plants and minerals"], domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy","Nature","Mind"], modifierType: 'multiply', amount: .25, hasTiers: false, description: "Once sensed, the spell ends" },
+  { name: "Reset once Sensed", incompatible:["End once Sensed"],prerequisite:["Sense Magic", "Sense Life(Animal)", "Sense Gods, Good and Evil", "Sense souls", "Sense liquids", "Sense temperature", "Sense gases", "Sense plants and minerals"], domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy","Nature","Mind"], modifierType: 'multiply', amount: .5, hasTiers: false, description: "Once sensed, the spell goes back to a holding state" },
+
+  { name: "Warp Light", domains: ["Air","Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "hides something or causes it to glow, or reveal something visible elsewhere in range, in an area [tier] meters cubed. If used to hide or become invisible, gives a disavdantage to finding the target" },
+  { name: "Illusion", domains: ["Illusion"], modifierType: 'add', amount: 3, hasTiers: true, description: "create a ficticious image inside a bounding box of [tier] meters cubed" },
+  
+  { name: "Light", domains: ["Holy","Fire","Necromancy","Sorcery","Illusion"], modifierType: 'add', amount: 1, hasTiers: true, description: "illuminates {light([tier])}" },
+  { name: "Noise", domains: ["Holy","Fire","Necromancy","Sorcery","Illusion","Nature","Air","Water","Earth"], modifierType: 'add', amount: 1, hasTiers: true, description: "causes noise {noise([tier])}" },
+  
+  { name: "Sound (Subject Matter)", domains: ["Sorcery","Illusion","Mind"], modifierType: 'function', amount: 'sound', hasTiers: true, maxTier:3, description: "creates sounds that {sound([tier])}" },
+  { name: "Sound (Volume)", domains: ["Sorcery","Illusion","Mind"], modifierType: 'add', amount: 1, hasTiers: true, maxTier:3, description: "at a volume of {volume([tier])}" },
+ 
+  { name: "Silence", domains: ["Air","Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "Dampens the volume of noises in an area, If used to hide or become silent, gives a disadvantage to listening for the target in an area [tier] meters cubed. Making a caster character silent means they can only use spells with the Stealth modifier or Cantrips until the silence ends" },
+  { name: "Negate Magic", domains: ["Sorcery","Necromancy"], modifierType: 'add', amount: 1, hasTiers: true, description: "Ends all lasting spells with less SP than [tier] in the target area. New spells cast for the next turn have [tier] number added to their spell difficulty" },
 
   { name: "Help Attribute", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to [notes]" },
   { name: "Help Skill", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to [notes]" },
   { name: "Help Speciality", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to [notes]" },
+  { name: "Hinder Skill", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier] points from [notes]" },
+  { name: "Hinder Speciality", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier*2] points from [notes]" },
+
 ]
