@@ -305,6 +305,10 @@ function coneHeightCalc(tier, notes) {
   }
 }
 
+// this is used to dynamically evaluate functions while maintaining their name in minified builds
+const functionMap = {
+  'rangeMeters': rangeMeters,
+}
 
 export function calculateDescription(effect, SPCost) {
   const { name, description, selectedDomain, selectedMode } = meta;
@@ -348,6 +352,10 @@ export function calculateDescription(effect, SPCost) {
       evalString = evalString.replace("{", "");
       evalString = evalString.replace("}", "");
       evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
+      Object.keys(functionMap).forEach(fun => {
+        evalString = evalString.replace(fun, functionMap[fun].name);
+      })
+
       let evalResult = ""
 
       try {
