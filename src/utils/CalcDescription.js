@@ -3,15 +3,16 @@ import { get } from 'svelte/store';
 import * as meta from "../stores/selectedMeta.js";
 import * as modifiers from "../stores/selectedModifiers.js";
 import * as effects from "../stores/selectedEffects.js";
+import {plague, madness} from '../data/availableEffects.js';
 
-
-  function calcSpellResist() {
-    return calcSpellCost() + 5;
+  function calcSpellResist(SPCost) {
+    console.log(SPCost)
+    return calcSpellCost(SPCost) + 5;
   }
   
-  function calcSpellCost() {
-    const {  SPCost } = meta;
-    const SP = get(SPCost);
+  function calcSpellCost(SPCost) {
+      console.log(SPCost);
+    const SP = SPCost;
     let cost = Math.ceil(SP/10.0) + 1;
 
     const { selectedModifiers } = modifiers;
@@ -94,6 +95,69 @@ function movementConditionDesc(tier){
         case 3:
         default:
             return "unable to move at all";
+      }
+}
+function light(tier){
+    if(tier == 1){
+        return "a small room with light";
+    }
+    else if(tier < 5){
+        return "as bright as daylight";
+    }
+    else if(tier < 10){
+        return "intensely, causing blindness for 1 round for everyone looking at the light in a previously dark room at a distance of " + 10 * (tier - 4) + "m";
+    }
+    else{
+        return "intensely, causing blindness for 1 round for everyone looking at the light in a previously dark room at a distance of " + 10 * (tier - 4) + "m and in a previously lit room to a distance of " + 10 * (tier - 9) + "m";
+    }
+}
+
+function noise(tier){
+    if(tier < 4){
+        return 90 + 10*tier + " DB";
+    }
+    else if(tier < 8){
+        return 110 + 5*tier + " DB";
+    }
+    else {
+        return ">150DB causing deafness for 1 round at a distance of " + 10 * (tier - 7) + "m";
+    }
+}
+
+function sound(tier){
+    switch(tier){
+        case 1:
+          return "heard during the spell casting or preparation";
+        case 2:
+          return "that you can conceptualize in your mind during spell casting or preparation";
+        case 3:
+        default:
+            return "Generates entirely new based off some idea ";
+      }
+}
+
+function volume(tier){
+    switch(tier){
+        case 1:
+          return "50 DB";
+        case 2:
+          return "100 DB";
+        case 3:
+        default:
+            return "120 DB";
+      }
+}
+
+function sense(tier){
+    switch(tier){
+        case 1:
+          return "nonspecific";
+        case 2:
+          return ", a category of";
+        case 3:
+            return ", specifically"
+        default:
+            return "nonsense";
       }
 }
 function thoughts(tier){
@@ -243,8 +307,8 @@ function coneHeightCalc(tier,notes){
   }
 }
 
-export function calculateDescription(effect) {
 
+export function calculateDescription(effect, SPCost) {
   const { name, description, selectedDomain, selectedMode } = meta;
 
   const spell = {
@@ -263,12 +327,20 @@ export function calculateDescription(effect) {
       evalString = evalString.replace("tier", "effect.tier");
       evalString = evalString.replace("notes", "effect.notes");
       evalString = evalString.replace("domain", "spell.domain");
-      evalString = evalString.replace("cost", "calcSpellCost()");
-      evalString = evalString.replace("resist", "calcSpellResist()");
+      evalString = evalString.replace("cost", calcSpellCost(SPCost));
+      evalString = evalString.replace("resist", calcSpellResist(SPCost));
       evalString = evalString.replace("[", "");
       evalString = evalString.replace("]", "");
-      let evalResult = eval(evalString);
+      let evalResult = ""
 
+      console.log(evalString)
+    
+      try { 
+       evalResult = eval(evalString);
+      } catch (error) {
+        evalResult = `Error ${error}`;
+      }
+      console.log(evalResult);
       formattedDescription = formattedDescription.replace(e, evalResult);
     });
   }

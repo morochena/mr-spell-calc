@@ -3,6 +3,7 @@
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { availableModifiers } from "../data/availableModifiers.js";
   import { calculateDescription } from "../utils/CalcDescription.js";
+  import { SPCost } from "../stores/selectedMeta.js";
   
   let selectedModifier = null;
 
@@ -89,7 +90,7 @@
             </button>
           </td>
           <td>
-            {calculateDescription(modifier)}
+            {calculateDescription(modifier, $SPCost)}
           </td>
         </tr>
       {/each}

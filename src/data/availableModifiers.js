@@ -115,7 +115,7 @@ export const availableModifiers = [
   { name: "Split", hasTiers: true, modifierType: 'function', amount: "splitModifier", types: ['Concentrated Power'], description: "splite to [tier+1] effects, each of which" },
   { name: "Range", hasTiers: true, modifierType: 'function', amount: "rangeModifier", description: "has a range of {rangeMeters([tier])} meters or {rangeMeters([tier])*3} with disadvantage" },
   { name: "Trigger Action", hasTiers: false, modifierType: 'multiply', amount: 0.5, description: "the target has to [notes] which takes an action in combat, or be restrained and have someone else perform the action for them" },
-  { name: "Thwarted By", hasTiers: false, modifierType: 'multiply', amount: 0.667, description: "the target rolls their {thwartStat([domain])} bonus versus difficulty {calcSpellResist()} " },
+  { name: "Thwarted By", hasTiers: false, modifierType: 'multiply', amount: 0.667, description: "the target rolls their {thwartStat([domain])} bonus versus difficulty [resist] " },
   { name: "Area of Effect (Sphere)", hasTiers: true, modifierType: 'function', amount: "aoeModifier", description: "covers a continuous Sphere with radius {radiusCalc([tier])} ." },
   { name: "Area of Effect (Rectangle)", hasTiers: true, modifierType: 'function', amount: "aoeModifier", description: "covers a continuous Rectangle with length [notes] and width {rectWidthCalc([tier],[notes])}" },
   { name: "Area of Effect (Cone)", hasTiers: true, modifierType: 'function', amount: "aoeModifier", description: "covers a continuous Cone with length [notes] and width {rectWidthCalc([tier],[notes])}." },
