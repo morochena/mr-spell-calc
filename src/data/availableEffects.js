@@ -50,6 +50,6 @@ export const availableEffects = [
 
 
   { name: "Help Attribute", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to [notes]" },
-  { name: "Help Skill", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to a skill" },
-  { name: "Help Speciality", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to a speciality" },
+  { name: "Help Skill", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to [notes]" },
+  { name: "Help Speciality", domains: ["Mind", "Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to [notes]" },
 ]

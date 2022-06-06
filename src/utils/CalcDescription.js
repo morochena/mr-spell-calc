@@ -196,6 +196,8 @@ export function calculateDescription(effect) {
       evalString = evalString.replace("tier", "effect.tier");
       evalString = evalString.replace("notes", "effect.notes");
       evalString = evalString.replace("domain", "spell.domain");
+      evalString = evalString.replace("cost", "calcSpellCost()");
+      evalString = evalString.replace("resist", "calcSpellResist()");
       evalString = evalString.replace("[", "");
       evalString = evalString.replace("]", "");
       let evalResult = eval(evalString);
