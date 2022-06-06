@@ -352,11 +352,13 @@ export function calculateDescription(effect, SPCost) {
       let evalString = e;
       evalString = evalString.replace("{", "");
       evalString = evalString.replace("}", "");
-      evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
+      if(spell.domain)
+        evalString = evalString.replace(spell.domain, "'" + spell.domain + "'")
       let evalResult = ""
-      
       try { 
+      console.log(evalString);
        evalResult = eval(evalString);
+      
       } catch (error) {
         evalResult = `Error ${error}`;
       }
