@@ -3,10 +3,20 @@ import { selectedEffects } from './selectedEffects.js'
 import { selectedModifiers } from './selectedModifiers.js'
 import { availableModifiers } from '../data/availableModifiers.js'
 import { availableEffects } from '../data/availableEffects.js'
-import { selectedDomain } from './selectedMeta.js';
+import { selectedDomain, isAlchemy, isRunesmith } from './selectedMeta.js';
 
 export const allowedModifiers = writable([]);
 export const allowedEffects = writable([]);
+
+isAlchemy.subscribe((value) => {
+  calculateAllowedModifiers(get(selectedModifiers), get(selectedEffects))
+  calculateAllowedEffects(get(selectedModifiers), get(selectedModifiers))
+})
+
+isRunesmith.subscribe((value) => {
+  calculateAllowedModifiers(get(selectedModifiers), get(selectedEffects))
+  calculateAllowedEffects(get(selectedModifiers), get(selectedModifiers))
+})
 
 selectedDomain.subscribe(domain => {
   calculateAllowedModifiers(get(selectedModifiers), get(selectedEffects))
@@ -24,20 +34,32 @@ selectedModifiers.subscribe(modifiers => {
 })
 
 function calculateAllowedEffects(selectedMods, selectedEffects) {
+
+  const toCheck = selectedMods.concat(selectedEffects)
+  if (get(isAlchemy)) {
+    toCheck.push({ name: "Alchemist" })
+  }
+  if (get(isRunesmith)) {
+    toCheck.push({ name: "Runesmith" })
+  }
+
   availableEffects.forEach(effect => {
     let disabled = false;
 
     if (effect.prerequisite) {
+      let foundOne = false;
       effect.prerequisite.forEach(prerequisite => {
-        if (!selectedMods.concat(selectedEffects).find(m => m.name == prerequisite)) {
-          disabled = true;
+        if (toCheck.find(m => m.name == prerequisite)) {
+          foundOne = true;
         }
       })
+
+      disabled = !foundOne;
     }
 
     if (effect.incompatible) {
       effect.incompatible.forEach(incompatible => {
-        if (selectedMods.concat(selectedEffects).find(m => m.name == incompatible)) {
+        if (toCheck.find(m => m.name == incompatible)) {
           disabled = true;
         }
       })
@@ -54,20 +76,34 @@ function calculateAllowedEffects(selectedMods, selectedEffects) {
 }
 
 function calculateAllowedModifiers(selectedMods, selectedEffects) {
+
+  const toCheck = selectedMods.concat(selectedEffects)
+  if (get(isAlchemy)) {
+    toCheck.push({ name: "Alchemist" })
+  }
+  if (get(isRunesmith)) {
+    toCheck.push({ name: "Runesmith" })
+  }
+
+  console.log(toCheck)
+
   availableModifiers.forEach(modifier => {
     let disabled = false;
 
     if (modifier.prerequisite) {
+      let foundOne = false;
       modifier.prerequisite.forEach(prerequisite => {
-        if (!selectedMods.concat(selectedEffects).find(m => m.name == prerequisite)) {
-          disabled = true;
+        if (toCheck.find(m => m.name == prerequisite)) {
+          foundOne = true;
         }
       })
+
+      disabled = !foundOne;
     }
 
     if (modifier.incompatible) {
       modifier.incompatible.forEach(incompatible => {
-        if (selectedMods.concat(selectedEffects).find(m => m.name == incompatible)) {
+        if (toCheck.find(m => m.name == incompatible)) {
           disabled = true;
         }
       })
