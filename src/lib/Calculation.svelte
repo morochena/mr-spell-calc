@@ -10,6 +10,14 @@
     lastingModifier,
     componentModifier,
   } from "../data/availableModifiers.js";
+
+  // cool hack
+  splitModifier;
+  rangeModifier;
+  aoeModifier;
+  lastingModifier;
+  componentModifier;
+
   import { get } from "svelte/store";
 
   import { createElement, movementCondition, geas, sound, plague, madness } from "../data/availableEffects.js";
