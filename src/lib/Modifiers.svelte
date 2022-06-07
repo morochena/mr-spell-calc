@@ -13,8 +13,8 @@
     selectedModifier = null;
   };
 
-  const deleteModifier = (modifier) => {
-    selectedModifiers.update((n) => n.filter((m) => m.name !== modifier.name));
+  const deleteModifier = (index) => {
+    selectedModifiers.update((n) => n.filter((_, i) => i !== index));
   };
 </script>
 
@@ -56,7 +56,7 @@
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white">
-      {#each $selectedModifiers as modifier}
+      {#each $selectedModifiers as modifier, index}
         <tr>
           <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{modifier.name}</td>
           <td>
@@ -79,7 +79,7 @@
             />
           </td>
           <td>
-            <button class="mt-1" on:click={() => deleteModifier(modifier)}>
+            <button class="mt-1" on:click={() => deleteModifier(index)}>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fill-rule="evenodd"
