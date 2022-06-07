@@ -76,14 +76,26 @@
   function calcSpellCost(value) {
     let cost = Math.ceil(value / 10.0) + 1;
     const modList = get(selectedModifiers);
+    let val = 1;
+
+    let subModList = modList.filter(
+      (mod) => mod.name !== "Exhausting" && mod.name !== "Uncomplicated"
+    );
+
+    const effectList = get(selectedEffects);
+    const effectAndsubModifierValues = subModList.concat(effectList);
+    const subModSP = calculateSPCostParam(effectAndsubModifierValues);
+    let subcost = Math.ceil(subModSP / 10.0) + 1;
+    if (subcost != cost) {
+      val = 2;
+    }
+
     if (modList.filter((mod) => mod.name === "Exhausting").length > 0) {
-      cost += 1;
+      cost += val;
     }
     if (modList.filter((mod) => mod.name === "Uncomplicated").length > 0) {
-      cost -= 1;
+      cost -= val;
     }
-    //TODO essentially I need to run the cost calculations without Uncomplicated/Exhausting and then with and compare them
-
     return cost;
   }
 
@@ -116,11 +128,7 @@
     spellCost = calcSpellCost(value);
   });
 
-  function calculateSPCost() {
-    const effectAndModifierValues = selectedEffectValues.concat(
-      selectedModifierValues
-    );
-
+  function calculateSPCostParam(effectAndModifierValues) {
     totalSPAdds = 0;
     totalSPMults = 1;
 
@@ -148,7 +156,7 @@
     }, 0);
 
     totalSPAdds = modifierCost;
-    totalSPCost = modifierCost;
+    let paramSPCost = modifierCost;
 
     let spMultipliers = effectAndModifierValues.filter(
       (modifier) =>
@@ -158,16 +166,25 @@
 
     spMultipliers.forEach((modifier) => {
       if (modifier.modifierType === "functionMultiply") {
-        totalSPCost *= runModifier(modifier)[1];
+        paramSPCost *= runModifier(modifier)[1];
         totalSPMults *= runModifier(modifier)[1];
       } else {
-        totalSPCost *= modifier.amount;
+        paramSPCost *= modifier.amount;
         totalSPMults *= modifier.amount;
       }
     });
 
-    totalSPCost = Math.ceil(totalSPCost);
-    totalSPCost = Math.max(totalSPCost, 0);
+    paramSPCost = Math.ceil(paramSPCost);
+    paramSPCost = Math.max(paramSPCost, 0);
+
+    return paramSPCost;
+  }
+
+  function calculateSPCost() {
+    const effectAndModifierValues = selectedEffectValues.concat(
+      selectedModifierValues
+    );
+    totalSPCost = calculateSPCostParam(effectAndModifierValues);
     $SPCost = totalSPCost;
   }
 
