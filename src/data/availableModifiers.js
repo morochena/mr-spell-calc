@@ -92,13 +92,7 @@ export const lastingModifier = (tier, type = null) => {
 }
 
 export const componentModifier = (tier) => {
-  let cost = 0;
-
-  for (let i = 0; i < tier; i++) {
-    cost -= 1
-  }
-
-  return cost;
+  return tier * -1 + 1;
 }
 
 export const availableModifiers = [
