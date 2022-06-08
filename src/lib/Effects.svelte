@@ -27,8 +27,8 @@
     selectedDescription = null;
   };
 
-  const deleteEffect = (effect) => {
-    selectedEffects.update((n) => n.filter((m) => m.name !== effect.name));
+  const deleteEffect = (index) => {
+    selectedEffects.update((n) => n.filter((_, i) => i !== index));
   };
 </script>
 
@@ -69,7 +69,7 @@
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white">
-      {#each $selectedEffects as effect}
+      {#each $selectedEffects as effect, index}
         <tr>
           <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{effect.name}</td>
           <td>
@@ -92,7 +92,7 @@
             />
           </td>
           <td>
-            <button class="mt-1" on:click={() => deleteEffect(effect)}>
+            <button class="mt-1" on:click={() => deleteEffect(index)}>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fill-rule="evenodd"
