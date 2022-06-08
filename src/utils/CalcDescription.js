@@ -26,14 +26,29 @@ function calcSpellCost(SPCost) {
   return cost;
 }
 
+function halftime() {
+  const { selectedModifiers } = modifiers;
+  const modList = get(selectedModifiers).filter(mod => mod.name.includes("Lasting"));
+  if (modList.length <= 0) {
+    return "Lasting modifier not found"
+  }
+  const increment = modList[0].name.match(/\((.*?)\)/g)[0];
+  const time = modList[0].tier / 2
+  return time + " " + increment
+}
+
 function calcComponentCost(tier) {
   let cost = 1;
-  if (tier < 5)
-    cost = tier * 25;
-  else if (tier < 9)
-    cost = 100 + (tier - 4) * 100;
+  const ftier = tier - 1;
+  if (ftier < 5)
+    cost = ftier * 25;
+  else if (ftier < 9)
+    cost = 100 + (ftier - 4) * 100;
   else
-    cost = 500 + (tier - 8) * 2000;
+    cost = 500 + (ftier - 8) * 2000;
+
+  if (cost <= 0)
+    return "less than 1";
   return cost;
 }
 
@@ -325,7 +340,8 @@ const functionMap = {
   'aoeArea': aoeArea,
   'radiusCalc': radiusCalc,
   'rectWidthCalc': rectWidthCalc,
-  'coneHeightCalc': coneHeightCalc
+  'coneHeightCalc': coneHeightCalc,
+  'halfTime': halftime
 }
 
 export function calculateDescription(effect, SPCost) {

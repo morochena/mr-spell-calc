@@ -92,13 +92,7 @@ export const lastingModifier = (tier, type = null) => {
 }
 
 export const componentModifier = (tier) => {
-  let cost = 0;
-
-  for (let i = 0; i < tier; i++) {
-    cost -= 1
-  }
-
-  return cost;
+  return tier * -1 + 1;
 }
 
 export const availableModifiers = [
@@ -108,10 +102,10 @@ export const availableModifiers = [
   { name: "Exhausting", hasTiers: false, incompatible: ["Uncomplicated"], modifierType: 'reduce', amount: 4, description: "" },
   { name: "Uncomplicated", hasTiers: false, incompatible: ["Exhausting"], modifierType: 'add', amount: 4, description: "" },
   { name: "Charge Up", hasTiers: false, incompatible: ["Stealth"], modifierType: 'reduce', amount: 4, description: "taking 2 actions of obvious magical charging" },
-  { name: "Dangerous", hasTiers: false, incompatible: ["Stable"], modifierType: 'reduce', amount: 5, description: "On a failure of the spell or a roll of a 1, the cost of the spell is increased by 6, and cannot be taken from Arcana. The cost can overflow from mind to body" },
+  { name: "Dangerous", hasTiers: false, incompatible: ["Stable", "Rune", "Alchemy"], modifierType: 'reduce', amount: 5, description: "On a failure of the spell or a roll of a 1, the cost of the spell is increased by 6, and cannot be taken from Arcana. The cost can overflow from mind to body" },
   { name: "Painful", hasTiers: false, modifierType: 'reduce', amount: 6, description: "The cost applies to body as well as mind" },
   { name: "Stealth", hasTiers: false, incompatible: ["Somatic", "Charge Up"], modifierType: 'add', amount: 1, description: "is discreet, with no visible somatic or vocal components, nor any glow or magical energies." },
-  { name: "Somatic", hasTiers: false, incompatible: ["Stealth"], modifierType: 'reduce', amount: 3, description: "requires both hands to perform [notes]" },
+  { name: "Somatic", hasTiers: false, incompatible: ["Stealth", "Rune", "Alchemy"], modifierType: 'reduce', amount: 3, description: "requires both hands to perform [notes]" },
   { name: "Split", hasTiers: true, modifierType: 'function', amount: "splitModifier", types: ['Concentrated Power'], description: "splite to [tier+1] effects, each of which" },
   { name: "Range", hasTiers: true, modifierType: 'function', amount: "rangeModifier", description: "has a range of {rangeMeters([tier])} meters or {rangeMeters([tier])*3} with disadvantage" },
   { name: "Trigger Action", hasTiers: false, modifierType: 'multiply', amount: 0.5, description: "the target has to [notes] which takes an action in combat, or be restrained and have someone else perform the action for them" },
@@ -125,22 +119,22 @@ export const availableModifiers = [
   { name: "Lasting (Hours)", incompatible: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Days)", "Lasting (Weeks)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", maxTier: 24, description: "lasts for [tier] hours" },
   { name: "Lasting (Days)", incompatible: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Hours)", "Lasting (Weeks)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", maxTier: 7, description: "lasts for [tier] days" },
   { name: "Lasting (Weeks)", incompatible: ["Lasting (Rounds)", "Lasting (Minutes)", "Lasting (Hours)", "Lasting (Days)"], hasTiers: true, modifierType: 'functionMultiply', amount: "lastingModifier", description: "lasts for [tier] weeks" },
-  { name: "Delay", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'multiply', amount: 0.333, description: "doesn't activate immediately, but instead goes off after half the total time the spell lasts for" },
-  { name: "Concentration", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Concentration" },
-  { name: "Channelling", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Channelling" },
+  { name: "Delay", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'multiply', amount: 0.333, description: "doesn't activate immediately, but instead goes off after {halfTime()}" },
+  { name: "Concentration", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Concentration for the whole time the spell is cast, and any time the user is hurt they must make a 'Willpower-Concentration' roll versus the amount of damage they took" },
+  { name: "Channelling", prerequisite: ["Lasting"], hasTiers: false, modifierType: 'add', amount: 0, description: "requires Channelling, giving up one action in combat or having disadvantage on anything else the duration of the spell" },
   { name: "Sculpted (Immune)", hasTiers: false, modifierType: 'add', amount: 2, description: "will not target the caster" },
   { name: "Sculpted (Pre-sculpted)", hasTiers: false, modifierType: 'add', amount: 3, description: "will not target [notes]" },
   { name: "Sculpted (Sculpted)", hasTiers: false, modifierType: 'add', amount: 4, description: "will not target anyone chosen by the caster." },
   { name: "Requires Component", hasTiers: true, modifierType: 'function', amount: "componentModifier", description: "requires a [notes], of at least cost {calcComponentCost([tier])} Denar" },
   { name: "Bulky Component", prerequisite: ["Requires Component"], hasTiers: false, modifierType: 'reduce', amount: 2, description: "the component is bulky" },
   { name: "Component Consumed", prerequisite: ["Requires Component"], hasTiers: false, modifierType: 'reduce', amount: 3, description: "the component(s) are consumed" },
-  { name: "Magical Runes (Runesmith only; Required for Runes)", prerequisite: ["Runesmith"], hasTiers: false, modifierType: 'add', amount: 7, description: "is a magical rune with a charge" },
+  { name: "Magical Runes (Runesmith only; Required for Runes)", incompatible: ["Somatic", "Dangerous"], prerequisite: ["Runesmith"], hasTiers: false, modifierType: 'add', amount: 7, description: "is a magical rune with a charge" },
   { name: "Magical Rune Extra Charge(Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: true, modifierType: 'add', amount: 2, description: "has [tier] charges" },
   { name: "Magical Rune Permanent (Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: false, modifierType: 'add', amount: 20, description: "never loses charge" },
   { name: "Magical Rune Small(Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: false, modifierType: 'add', amount: 5, description: "is a small rune" },
   { name: "Magical Rune Expendable (Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: false, modifierType: 'reduce', amount: 3, description: "the rune is consumed" },
   { name: "Runesmith crafting (Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: true, modifierType: 'reduce', amount: 2, description: "takes [tier+1] days to craft" },
-  { name: "Alchemy (Alchemist only; Required for Alchemy)", prerequisite: ["Alchemist"], hasTiers: false, modifierType: 'add', amount: 3, description: "is an alchemical item" },
+  { name: "Alchemy (Alchemist only; Required for Alchemy)", incompatible: ["Somatic"], prerequisite: ["Alchemist"], hasTiers: false, modifierType: 'add', amount: 3, description: "is an alchemical item" },
   { name: "Alchemy brewing (Alchemist only)", prerequisite: ["Alchemy (Alchemist only; Required for Alchemy)"], hasTiers: true, modifierType: 'reduce', amount: 1, description: "takes [tier+cost] hours to craft" },
   { name: "Elongated Shelf Life (Alchemist only)", prerequisite: ["Alchemy (Alchemist only; Required for Alchemy)"], hasTiers: false, modifierType: 'add', amount: 2, description: "keeps for [tier+1] months" },
 ]
