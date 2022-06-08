@@ -5,6 +5,8 @@
     selectedDomain,
     selectedMode,
     SPCost,
+    isAlchemy,
+    isRunesmith,
   } from "../stores/selectedMeta.js";
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { selectedEffects } from "../stores/selectedEffects.js";
@@ -61,6 +63,8 @@
     return 0;
   };
 
+  let isAlchemyValue = false;
+  let isRunesmithValue = false;
   let selectedModifierValues = [];
   let selectedEffectValues = [];
   let totalSPCost = 0;
@@ -68,6 +72,13 @@
   let totalSPMults = 0;
   let spellResist = 0;
   let spellCost = 0;
+
+  isAlchemy.subscribe((value) => {
+    isAlchemyValue = value;
+  });
+  isRunesmith.subscribe((value) => {
+    isRunesmithValue = value;
+  });
 
   function calcSpellResist(value) {
     return calcSpellCost(value) + 5;
@@ -188,6 +199,37 @@
     $SPCost = totalSPCost;
   }
 
+  function craftedSpellPreamble(isAlchemyValue, isRunesmithValue, spellCost) {
+    const modList = get(selectedModifiers);
+    let hours = spellCost;
+    let days = 1;
+    const alclist = modList.filter((mod) => mod.name.includes("brewing"));
+    const runelist = modList.filter((mod) => mod.name.includes("crafting"));
+    if (alclist.length > 0) {
+      hours += alclist[0].tier;
+    }
+    if (runelist.length > 0) {
+      days += runelist[0].tier;
+    }
+    if (isAlchemyValue)
+      return (
+        "This is an alchemical creation that takes a day to craft, which includes working on it for " +
+        hours +
+        " hours actively. Thereafter they can be used by anyone."
+      );
+    if (isRunesmithValue) {
+      hours = hours * 2;
+      return (
+        "This is an magical rune that takes " +
+        days +
+        " days to craft which includes " +
+        hours +
+        " in hours of intense labor. Thereafter they can be used by anyone."
+      );
+    }
+    return "";
+  }
+
   const calculateCostText = (modifier) => {
     switch (modifier.modifierType) {
       case "add":
@@ -226,6 +268,7 @@
     <hr class="my-3" />
     <div>
       <p>
+        {craftedSpellPreamble(isAlchemyValue, isRunesmithValue, spellCost)}
         {$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier}
           {calculateDescription(modifier, $SPCost)} and&nbsp;
         {/each} the target {#each selectedEffectValues as effect}
