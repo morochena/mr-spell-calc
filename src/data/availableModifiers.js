@@ -98,7 +98,7 @@ export const componentModifier = (tier) => {
 export const availableModifiers = [
   { name: "Ray", hasTiers: false, incompatible: ["Area of Effect"], prerequisite: ["Range"], modifierType: 'reduce', amount: 3, description: "the targets must be in direct line of sight for the character for the entire duration of the spell or the spell fails" },
   { name: "Aura", hasTiers: false, incompatible: ["Damage", "Attack"], prerequisite: ["Area of Effect"], modifierType: 'add', amount: 2, description: " is an Aura" },
-  { name: "Reaction", hasTiers: false, incompatible: ["Charge Up"], modifierType: 'add', amount: 2, description: "as a Reaction" },
+  { name: "Reaction", hasTiers: false, incompatible: ["Charge Up"], modifierType: 'add', amount: 3, description: "as a Reaction" },
   { name: "Exhausting", hasTiers: false, incompatible: ["Uncomplicated"], modifierType: 'reduce', amount: 4, description: "" },
   { name: "Uncomplicated", hasTiers: false, incompatible: ["Exhausting"], modifierType: 'add', amount: 4, description: "" },
   { name: "Charge Up", hasTiers: false, incompatible: ["Stealth"], modifierType: 'reduce', amount: 4, description: "taking 2 actions of obvious magical charging" },

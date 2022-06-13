@@ -85,8 +85,6 @@ function calculateAllowedModifiers(selectedMods, selectedEffects) {
     toCheck.push({ name: "Runesmith" })
   }
 
-  console.log(toCheck)
-
   availableModifiers.forEach(modifier => {
     let disabled = false;
 
