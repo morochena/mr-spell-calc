@@ -29,6 +29,7 @@
     plague,
     madness,
   } from "../data/availableEffects.js";
+  import { element } from "svelte/internal";
 
   const runModifier = (modifier) => {
     // evaluates eg. splitModifier(tier)
@@ -63,6 +64,9 @@
     return 0;
   };
 
+  const domainDesc = {
+    Fire: "Add 2 Damage and 2 Light",
+  };
   let isAlchemyValue = false;
   let isRunesmithValue = false;
   let selectedModifierValues = [];
@@ -191,6 +195,17 @@
     return paramSPCost;
   }
 
+  function calcNumberOfPowers(effects, modifiers) {
+    let sum = 0;
+    effects.forEach((element) => {
+      if (!element.prerequisite || element.prerequisite.length == 0) sum++;
+    });
+    modifiers.forEach((element) => {
+      if (!element.prerequisite || element.prerequisite.length == 0) sum++;
+    });
+    return sum;
+  }
+
   function calculateSPCost() {
     const effectAndModifierValues = selectedEffectValues.concat(
       selectedModifierValues
@@ -224,7 +239,7 @@
         days +
         " days to craft which includes " +
         hours +
-        " in hours of intense labor. Thereafter they can be used by anyone."
+        " in hours of intense labor per day. Thereafter they can be used by anyone."
       );
     }
     return "";
@@ -250,6 +265,9 @@
         }`;
     }
   };
+
+  const threeSpaces = "   ";
+
 </script>
 
 <div class="mt-10">
@@ -302,7 +320,13 @@
     <tbody>
       {#each selectedModifierValues as modifier}
         <tr>
-          <td>{modifier.name}</td>
+          <td
+            >{#if modifier.prerequisite && modifier.prerequisite.length > 0}
+              {threeSpaces}
+            {:else}
+              •
+            {/if}{modifier.name}</td
+          >
           <td>{calculateCostText(modifier)}</td>
           <td>{modifier.tier}</td>
           <td>{calculateDescription(modifier, $SPCost)}</td>
@@ -311,7 +335,13 @@
       {/each}
       {#each selectedEffectValues as effect}
         <tr>
-          <td>{effect.name}</td>
+          <td
+            >{#if effect.prerequisite && effect.prerequisite.length > 0}
+              {threeSpaces}
+            {:else}
+              •
+            {/if}{effect.name}</td
+          >
           <td>{calculateCostText(effect)}</td>
           <td>{effect.tier}</td>
           <td>{calculateDescription(effect, $SPCost)}</td>
@@ -328,4 +358,10 @@
       </tr>
     </tbody>
   </table>
+  <div>
+    <p>
+      <strong>Number of Powers:</strong>
+      {calcNumberOfPowers(selectedEffectValues, selectedModifierValues)}
+    </p>
+  </div>
 </div>
