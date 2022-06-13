@@ -29,34 +29,35 @@
     plague,
     madness,
   } from "../data/availableEffects.js";
-  import { element } from "svelte/internal";
+  import { element, identity, xlink_attr } from "svelte/internal";
 
   const runModifier = (modifier) => {
     // evaluates eg. splitModifier(tier)
-
+    let truetier = modifier.tier;
+    if (modifier.domaintier) truetier -= modifier.domaintier;
     switch (modifier.amount) {
       case "splitModifier":
-        return splitModifier(modifier.tier);
+        return splitModifier(truetier);
       case "rangeModifier":
-        return rangeModifier(modifier.tier);
+        return rangeModifier(truetier);
       case "aoeModifier":
-        return aoeModifier(modifier.tier);
+        return aoeModifier(truetier);
       case "lastingModifier":
-        return lastingModifier(modifier.tier, modifier.name);
+        return lastingModifier(truetier, modifier.name);
       case "componentModifier":
-        return componentModifier(modifier.tier);
+        return componentModifier(truetier);
       case "createElement":
-        return createElement(modifier.tier);
+        return createElement(truetier);
       case "movementCondition":
-        return movementCondition(modifier.tier);
+        return movementCondition(truetier);
       case "geas":
-        return geas(modifier.tier);
+        return geas(truetier);
       case "sound":
-        return sound(modifier.tier);
+        return sound(truetier);
       case "plague":
-        return plague(modifier.tier);
+        return plague(truetier);
       case "madness":
-        return madness(modifier.tier);
+        return madness(truetier);
     }
 
     console.log("modifier case not handled: ", modifier.amount);
@@ -64,9 +65,6 @@
     return 0;
   };
 
-  const domainDesc = {
-    Fire: "Add 2 Damage and 2 Light",
-  };
   let isAlchemyValue = false;
   let isRunesmithValue = false;
   let selectedModifierValues = [];
@@ -76,6 +74,7 @@
   let totalSPMults = 0;
   let spellResist = 0;
   let spellCost = 0;
+  let illusionDiscount = 0;
 
   isAlchemy.subscribe((value) => {
     isAlchemyValue = value;
@@ -143,34 +142,258 @@
     spellCost = calcSpellCost(value);
   });
 
+  function processDomainEffects(sDomain, sEffects) {
+    let effects = sEffects;
+    console.log(effects);
+    effects = structuredClone(effects);
+    let domain = sDomain;
+    switch (domain) {
+      case "Fire":
+        let x = effects.find((x) => x.name === "Damage");
+        if (x && (!x.domaintier || x.domaintier <= 0)) {
+          x.tier += 2;
+          x.domaintier = 2;
+          x.notes = "+2 Fire Domain Damage";
+          x.prerequisite = ["Fire"];
+        } else if (!x)
+          effects.push({
+            name: "Damage",
+            tier: 2,
+            domaintier: 2,
+            hasTiers: true,
+            prerequisite: ["Fire"],
+            notes: "Fire Domain",
+            modifierType: "add",
+            amount: 2,
+            description: "+2 DMG",
+          });
+        let y = effects.find((y) => y.name === "Light");
+        if (y && (!y.domaintier || y.domaintier <= 0)) {
+          y.tier += 2;
+          y.domaintier = 2;
+          y.notes = "+2 Fire Domain Light";
+          y.prerequisite = ["Fire"];
+        } else if (!y)
+          effects.push({
+            name: "Light",
+            tier: 2,
+            domaintier: 2,
+            hasTiers: true,
+            prerequisite: ["Fire"],
+            notes: "Fire Domain",
+            modifierType: "add",
+            amount: 2,
+            description: "Flickers with enough light to brighten a dark room",
+          });
+        let z = effects.find((z) => z.name === "Create Element");
+        if (!z) {
+          effects.push({
+            name: "Require Element",
+            tier: 0,
+            domaintier: 0,
+            hasTiers: true,
+            prerequisite: ["Fire"],
+            notes: "Fire Domain",
+            modifierType: "add",
+            amount: 0,
+            description: "Requires the presence of Fire or the spell fails",
+          });
+        }
+        break;
+      case "Air":
+        let air = effects.find((air) => air.name === "Create Element");
+        if (!air) {
+          effects.push({
+            name: "Require Element",
+            tier: 0,
+            domaintier: 0,
+            hasTiers: true,
+            prerequisite: ["Air"],
+            notes: "Air Domain",
+            modifierType: "add",
+            amount: 0,
+            description: "Requires the presence of Air or the spell fails",
+          });
+        }
+        break;
+      case "Water":
+        let water = effects.find((water) => water.name === "Create Element");
+        if (!water) {
+          effects.push({
+            name: "Require Element",
+            tier: 0,
+            domaintier: 0,
+            hasTiers: true,
+            prerequisite: ["Water"],
+            notes: "Water Domain",
+            modifierType: "add",
+            amount: 0,
+            description: "Requires the presence of Water or the spell fails",
+          });
+        }
+        break;
+      case "Earth":
+        let force = effects.find((force) => force.name === "Apply Force");
+        if (force && (!force.domaintier || force.domaintier <= 0)) {
+          force.tier += 2;
+          force.domaintier = 2;
+          force.notes += " powered up by Earth Domain";
+          force.prerequisite = ["Earth"];
+        } else if (!force)
+          effects.push({
+            name: "Apply Force",
+            tier: 2,
+            domaintier: 2,
+            hasTiers: true,
+            prerequisite: ["Earth"],
+            notes: "Earth Domain",
+            modifierType: "add",
+            amount: 2,
+            description: "is moved 2 meters",
+          });
+        let earth = effects.find((earth) => earth.name === "Create Element");
+        if (!earth) {
+          effects.push({
+            name: "Require Element",
+            tier: 0,
+            domaintier: 0,
+            hasTiers: true,
+            prerequisite: ["Earth"],
+            notes: "Earth Domain",
+            modifierType: "add",
+            amount: 0,
+            description: "Requires the presence of Earth or the spell fails",
+          });
+        }
+        break;
+      case "Mind":
+        effects.push({
+          name: "Require Mind",
+          tier: 0,
+          domaintier: 0,
+          hasTiers: true,
+          prerequisite: ["Mind"],
+          notes: "Mind Domain",
+          modifierType: "add",
+          amount: 0,
+          description: "Requires the presence of a Mind or the spell fails",
+        });
+        break;
+      case "Nature":
+        effects.push({
+          name: "Require Nature",
+          tier: 0,
+          domaintier: 0,
+          hasTiers: true,
+          prerequisite: ["Nature"],
+          notes: "Nature Domain",
+          modifierType: "add",
+          amount: 0,
+          description: "Requires the presence of a Life or the spell fails",
+        });
+        break;
+      case "Illusion":
+        effects.push({
+          name: "Illusion Discount",
+          tier: 1,
+          domaintier: 0,
+          hasTiers: true,
+          prerequisite: ["Illusion"],
+          notes:
+            "When Taking Illusion Powers in a spell as well as the “Help Statistic/Skill/Specialty” Power, Ignore the spell points of the Illusion Powers up to the amount spent on the “Help Statistic/Skill/Specialty” Power",
+          modifierType: "reduce",
+          amount: illusionDiscount,
+          description: "",
+        });
+        break;
+      default:
+        break;
+    }
+    return effects;
+  }
+
+  function processDomainModifiers(sDomain, sModifiers) {
+    let modifiers = sModifiers;
+    modifiers = structuredClone(modifiers);
+    let domain = sDomain;
+    switch (domain) {
+      case "Fire":
+        break;
+      case "Air":
+        break;
+      case "Water":
+        /*let water = modifiers.find((water) =>
+          water.name.includes("Area of Effect")
+        );
+        if (water) {
+          {
+            water.notes += "Water Domain Doubles Area";
+          }
+        }*/
+        break;
+      case "Earth":
+        break;
+      case "Mind":
+        break;
+      case "Nature":
+        break;
+      case "Illusion":
+        break;
+      default:
+        break;
+    }
+    return modifiers;
+  }
+
+  function calcIllusionDiscount(total, effects) {
+    let help = effects.filter((x) => x.name.includes("Help"));
+    let helpSP = 0;
+    help.forEach((element) => {
+      helpSP += resolveCost(element);
+    });
+    illusionDiscount = Math.min(helpSP, Math.max(total - helpSP, 0));
+    return illusionDiscount;
+  }
+
+  function resolveCost(modifier) {
+    let cost = 0;
+    switch (modifier.modifierType) {
+      case "add":
+        cost = modifier.amount * modifier.tier;
+        break;
+      case "reduce":
+        cost = modifier.amount * modifier.tier * -1;
+        break;
+      case "function":
+        cost = runModifier(modifier);
+        break;
+      case "functionMultiply":
+        if (modifier.name.includes("Lasting")) {
+          cost = runModifier(modifier)[0];
+        } else {
+          cost = runModifier(modifier)[0];
+        }
+        break;
+    }
+    return cost;
+  }
+
   function calculateSPCostParam(effectAndModifierValues) {
     totalSPAdds = 0;
     totalSPMults = 1;
 
     let modifierCost = effectAndModifierValues.reduce((total, modifier) => {
-      let cost = 0;
-      switch (modifier.modifierType) {
-        case "add":
-          cost = modifier.amount * modifier.tier;
-          break;
-        case "reduce":
-          cost = modifier.amount * modifier.tier * -1;
-          break;
-        case "function":
-          cost = runModifier(modifier);
-          break;
-        case "functionMultiply":
-          if (modifier.name.includes("Lasting")) {
-            cost = runModifier(modifier)[0];
-          } else {
-            cost = runModifier(modifier)[0];
-          }
-          break;
-      }
-      return total + cost;
+      return total + resolveCost(modifier);
     }, 0);
 
+    if (get(selectedDomain) === "Illusion")
+      modifierCost -= calcIllusionDiscount(
+        modifierCost,
+        effectAndModifierValues
+      );
+
     totalSPAdds = modifierCost;
+
     let paramSPCost = modifierCost;
 
     let spMultipliers = effectAndModifierValues.filter(
@@ -198,10 +421,18 @@
   function calcNumberOfPowers(effects, modifiers) {
     let sum = 0;
     effects.forEach((element) => {
-      if (!element.prerequisite || element.prerequisite.length == 0) sum++;
+      if (
+        (!element.prerequisite || element.prerequisite.length == 0) &&
+        (!element.domaintier || element.domaintier <= 0)
+      )
+        sum++;
     });
     modifiers.forEach((element) => {
-      if (!element.prerequisite || element.prerequisite.length == 0) sum++;
+      if (
+        (!element.prerequisite || element.prerequisite.length == 0) &&
+        (!element.domaintier || element.domaintier <= 0)
+      )
+        sum++;
     });
     return sum;
   }
@@ -246,13 +477,16 @@
   }
 
   const calculateCostText = (modifier) => {
+    let truetier = modifier.tier;
+    if (modifier.domaintier) truetier -= modifier.domaintier;
+
     switch (modifier.modifierType) {
       case "add":
-        return `+${modifier.amount * modifier.tier}`;
+        return `+${modifier.amount * truetier}`;
       case "reduce":
-        return `${modifier.amount * modifier.tier * -1}`;
+        return `${modifier.amount * truetier * -1}`;
       case "multiply":
-        return `x${modifier.amount * modifier.tier}`;
+        return `x${modifier.amount * truetier}`;
       case "function":
         const amount = runModifier(modifier);
         const operator = amount > 0 ? "+" : "";
@@ -281,12 +515,13 @@
       <p><strong>Mental Cost:</strong> {spellCost}</p>
     </div>
     <hr class="my-3" />
+
     <div>
       <p>
         {craftedSpellPreamble(isAlchemyValue, isRunesmithValue, spellCost)}
-        {$description}. The caster {verboseSpellMode($selectedMode)} that {#each selectedModifierValues as modifier}
+        {$description}. The caster {verboseSpellMode($selectedMode)} that {#each processDomainModifiers($selectedDomain, $selectedModifiers) as modifier}
           {calculateDescription(modifier, $SPCost)} and&nbsp;
-        {/each} the target {#each selectedEffectValues as effect}
+        {/each} the target {#each processDomainEffects($selectedDomain, $selectedEffects) as effect}
           {calculateDescription(effect, $SPCost)}.&nbsp;
         {/each}
       </p>
@@ -315,7 +550,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each selectedModifierValues as modifier}
+      {#each processDomainModifiers($selectedDomain, $selectedModifiers) as modifier}
         <tr>
           <td
             >{#if modifier.prerequisite && modifier.prerequisite.length > 0}
@@ -330,7 +565,7 @@
           <td>{modifier.notes}</td>
         </tr>
       {/each}
-      {#each selectedEffectValues as effect}
+      {#each processDomainEffects($selectedDomain, $selectedEffects) as effect}
         <tr>
           <td
             >{#if effect.prerequisite && effect.prerequisite.length > 0}
@@ -358,7 +593,10 @@
   <div>
     <p>
       <strong>Number of Powers:</strong>
-      {calcNumberOfPowers(selectedEffectValues, selectedModifierValues)}
+      {calcNumberOfPowers(
+        processDomainEffects($selectedDomain, $selectedEffects),
+        processDomainModifiers($selectedDomain, $selectedModifiers)
+      )}
     </p>
   </div>
 </div>

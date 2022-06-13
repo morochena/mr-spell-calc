@@ -168,9 +168,9 @@ export const availableEffects = [
   { name: "Silence", domains: ["Air", "Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "Dampens the volume of noises in an area, If used to hide or become silent, gives a disadvantage to listening for the target in an area [tier] meters cubed. Making a caster character silent means they can only use spells with the Stealth modifier or Cantrips until the silence ends" },
   { name: "Negate Magic", domains: ["Sorcery", "Necromancy"], modifierType: 'add', amount: 1, hasTiers: true, description: "Ends all lasting spells with less SP than [tier] in the target area. New spells cast for the next turn have [tier] number added to their spell difficulty" },
 
-  { name: "Help Strength Attribute", domains: ["Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to Strength" },
-  { name: "Help Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to STR-[notes]" },
-  { name: "Help Strength Speciality", domains: ["Holy", "Necromancy", "Earth", "Air", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to STR-[notes]" },
+  { name: "Help Strength Attribute", domains: ["Holy", "Necromancy", "Earth", "Air", "Water", "Nature"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to Strength" },
+  { name: "Help Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Air", "Water", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to STR-[notes]" },
+  { name: "Help Strength Speciality", domains: ["Holy", "Necromancy", "Earth", "Air", "Water", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to STR-[notes]" },
   { name: "Help Dexterity Attribute", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to Dexterity" },
   { name: "Help Dexterity Skill", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to DEX-[notes]" },
   { name: "Help Dexterity Speciality", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to DEX-[notes]" },
