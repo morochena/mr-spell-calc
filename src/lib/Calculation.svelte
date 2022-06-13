@@ -499,6 +499,9 @@
         }`;
     }
   };
+
+  const threeSpaces = "   ";
+
 </script>
 
 <div class="mt-10">
@@ -554,7 +557,7 @@
         <tr>
           <td
             >{#if modifier.prerequisite && modifier.prerequisite.length > 0}
-              -
+              {threeSpaces}
             {:else}
               •
             {/if}{modifier.name}</td
@@ -569,7 +572,7 @@
         <tr>
           <td
             >{#if effect.prerequisite && effect.prerequisite.length > 0}
-              -
+              {threeSpaces}
             {:else}
               •
             {/if}{effect.name}</td
