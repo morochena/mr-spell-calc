@@ -291,7 +291,7 @@ const aoeArea = (tier) => {
     area *= 2;
   }
 
-  // double area if aura is selected
+  // double area if water is selected
   const { selectedDomain } = meta;
   const domain = get(selectedDomain);
   if (domain === "Water") {

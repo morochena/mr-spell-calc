@@ -2,7 +2,7 @@
   import { range } from "../utils/range.js";
   import { selectedModifiers } from "../stores/selectedModifiers.js";
   import { calculateDescription } from "../utils/CalcDescription.js";
-  import { SPCost } from "../stores/selectedMeta.js";
+  import { selectedDomain, SPCost } from "../stores/selectedMeta.js";
   import { allowedModifiers } from "../stores/allowedModifiersAndEffects.js";
 
   let selectedModifier = null;
@@ -16,6 +16,10 @@
   const deleteModifier = (index) => {
     selectedModifiers.update((n) => n.filter((_, i) => i !== index));
   };
+
+  selectedDomain.subscribe((value) => {
+    $selectedModifiers = [...$selectedModifiers];
+  });
 </script>
 
 <div class="mt-20">
@@ -33,7 +37,11 @@
       {/each}
     </select>
     {#if selectedModifier && selectedModifier.description}
-      <p class="mt-2 bg-gray-50 rounded-lg py-5 px-6 mb-4 text-sm text-gray-500 mb-3">{selectedModifier.description}</p>
+      <p
+        class="mt-2 bg-gray-50 rounded-lg py-5 px-6 mb-4 text-sm text-gray-500 mb-3"
+      >
+        {selectedModifier.description}
+      </p>
     {/if}
 
     <button
@@ -48,17 +56,36 @@
   <table class="mt-2 min-w-full divide-y divide-gray-300">
     <thead class="bg-gray-50">
       <tr>
-        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Modifier</th>
-        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tier</th>
-        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Notes</th>
-        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+        <th
+          scope="col"
+          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+          >Modifier</th
+        >
+        <th
+          scope="col"
+          class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          >Tier</th
+        >
+        <th
+          scope="col"
+          class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          >Notes</th
+        >
+        <th
+          scope="col"
+          class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          >Description</th
+        >
         <th scope="col" />
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white">
       {#each $selectedModifiers as modifier, index}
         <tr>
-          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{modifier.name}</td>
+          <td
+            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+            >{modifier.name}</td
+          >
           <td>
             {#if modifier.hasTiers}
               <select
@@ -80,7 +107,12 @@
           </td>
           <td>
             <button class="mt-1" on:click={() => deleteModifier(index)}>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
                 <path
                   fill-rule="evenodd"
                   d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"

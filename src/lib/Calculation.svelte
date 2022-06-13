@@ -144,7 +144,6 @@
 
   function processDomainEffects(sDomain, sEffects) {
     let effects = sEffects;
-    console.log(effects);
     effects = structuredClone(effects);
     let domain = sDomain;
     switch (domain) {
@@ -500,8 +499,15 @@
     }
   };
 
-  const threeSpaces = "   ";
+  const threeSpaces = "\t";
 
+  const effectClass = (effect) => {
+    if (effect.prerequisite && effect.prerequisite.length > 0) {
+      return "pl-5";
+    } else {
+      return "";
+    }
+  };
 </script>
 
 <div class="mt-10">
@@ -555,10 +561,8 @@
     <tbody>
       {#each processDomainModifiers($selectedDomain, $selectedModifiers) as modifier}
         <tr>
-          <td
-            >{#if modifier.prerequisite && modifier.prerequisite.length > 0}
-              {threeSpaces}
-            {:else}
+          <td class={effectClass(modifier)}
+            >{#if !modifier.prerequisite || modifier.prerequisite.length <= 0}
               •
             {/if}{modifier.name}</td
           >
@@ -570,10 +574,8 @@
       {/each}
       {#each processDomainEffects($selectedDomain, $selectedEffects) as effect}
         <tr>
-          <td
-            >{#if effect.prerequisite && effect.prerequisite.length > 0}
-              {threeSpaces}
-            {:else}
+          <td class={effectClass(effect)}
+            >{#if !effect.prerequisite || effect.prerequisite.length <= 0}
               •
             {/if}{effect.name}</td
           >
