@@ -106,7 +106,7 @@ export const availableModifiers = [
   { name: "Painful", hasTiers: false, modifierType: 'reduce', amount: 6, description: "The cost applies to body as well as mind" },
   { name: "Stealth", hasTiers: false, incompatible: ["Somatic", "Charge Up"], modifierType: 'add', amount: 1, description: "is discreet, with no visible somatic or vocal components, nor any glow or magical energies." },
   { name: "Somatic", hasTiers: false, incompatible: ["Stealth", "Rune", "Alchemy"], modifierType: 'reduce', amount: 3, description: "requires both hands to perform [notes]" },
-  { name: "Split", hasTiers: true, modifierType: 'function', amount: "splitModifier", types: ['Concentrated Power'], description: "splite to [tier+1] effects, each of which" },
+  { name: "Split", hasTiers: true, modifierType: 'function', amount: "splitModifier", types: ['Concentrated Power'], description: "split into [tier+1] effects, each of which" },
   { name: "Range", hasTiers: true, modifierType: 'function', amount: "rangeModifier", description: "has a range of {rangeMeters([tier])} meters or {rangeMeters([tier])*3} with disadvantage" },
   { name: "Trigger Action", hasTiers: false, modifierType: 'multiply', amount: 0.5, description: "the target has to [notes] which takes an action in combat, or be restrained and have someone else perform the action for them" },
   { name: "Thwarted By", hasTiers: false, modifierType: 'multiply', amount: 0.667, description: "the target rolls their {thwartStat([domain])} bonus versus difficulty [resist] " },
