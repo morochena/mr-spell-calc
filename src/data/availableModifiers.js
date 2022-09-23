@@ -101,7 +101,7 @@ export const availableModifiers = [
   { name: "Reaction", hasTiers: false, incompatible: ["Charge Up"], modifierType: 'add', amount: 3, description: "as a Reaction" },
   { name: "Exhausting", hasTiers: false, incompatible: ["Uncomplicated"], modifierType: 'reduce', amount: 4, description: "" },
   { name: "Uncomplicated", hasTiers: false, incompatible: ["Exhausting"], modifierType: 'add', amount: 4, description: "" },
-  { name: "Charge Up", hasTiers: false, incompatible: ["Stealth"], modifierType: 'reduce', amount: 4, description: "taking 2 actions of obvious magical charging" },
+  { name: "Charge Up", hasTiers: false, incompatible: ["Stealth"], modifierType: 'multiply', amount: .75, description: "taking 2 actions of obvious magical charging" },
   { name: "Dangerous", hasTiers: false, incompatible: ["Stable", "Rune", "Alchemy"], modifierType: 'reduce', amount: 5, description: "On a failure of the spell or a roll of a 1, the cost of the spell is increased by 6, and cannot be taken from Arcana. The cost can overflow from mind to body" },
   { name: "Painful", hasTiers: false, modifierType: 'reduce', amount: 6, description: "The cost applies to body as well as mind" },
   { name: "Stealth", hasTiers: false, incompatible: ["Somatic", "Charge Up"], modifierType: 'add', amount: 1, description: "is discreet, with no visible somatic or vocal components, nor any glow or magical energies." },
