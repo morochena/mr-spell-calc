@@ -75,12 +75,17 @@
   let spellResist = 0;
   let spellCost = 0;
   let illusionDiscount = 0;
+  let sMode = "";
 
   isAlchemy.subscribe((value) => {
     isAlchemyValue = value;
   });
   isRunesmith.subscribe((value) => {
     isRunesmithValue = value;
+  });
+  selectedMode.subscribe((value) => {
+    sMode = value;
+    calculateSPCost();
   });
 
   function calcSpellResist(value) {
@@ -142,9 +147,22 @@
     spellCost = calcSpellCost(value);
   });
 
-  function processDomainEffects(sDomain, sEffects) {
+  function processDomainEffects(sMode, sDomain, sEffects) {
     let effects = sEffects;
     effects = structuredClone(effects);
+
+    if (sMode === "Unpredicable") {
+      effects.push({
+        name: "Unpredictable",
+        tier: 1,
+        hasTiers: true,
+        notes: "Unpredictable spell",
+        modifierType: "add",
+        amount: 4,
+        description: "",
+      });
+    }
+
     let domain = sDomain;
     switch (domain) {
       case "Fire":
@@ -351,6 +369,7 @@
       helpSP += resolveCost(element);
     });
     illusionDiscount = Math.min(helpSP, Math.max(total - helpSP, 0));
+    if (sMode === "Unpredictable") illusionDiscount -= 4;
     return illusionDiscount;
   }
 
@@ -379,6 +398,7 @@
 
   function calculateSPCostParam(effectAndModifierValues) {
     totalSPAdds = 0;
+
     totalSPMults = 1;
 
     let modifierCost = effectAndModifierValues.reduce((total, modifier) => {
@@ -390,6 +410,10 @@
         modifierCost,
         effectAndModifierValues
       );
+
+    if (sMode === "Unpredicable") {
+      modifierCost += 4;
+    }
 
     totalSPAdds = modifierCost;
 
@@ -530,7 +554,7 @@
         {craftedSpellPreamble(isAlchemyValue, isRunesmithValue, spellCost)}
         {$description}. The caster {verboseSpellMode($selectedMode)} that {#each processDomainModifiers($selectedDomain, $selectedModifiers) as modifier}
           {calculateDescription(modifier, $SPCost)} and&nbsp;
-        {/each} the target {#each processDomainEffects($selectedDomain, $selectedEffects) as effect}
+        {/each} the target {#each processDomainEffects($selectedMode, $selectedDomain, $selectedEffects) as effect}
           {calculateDescription(effect, $SPCost)}.&nbsp;
         {/each}
       </p>
@@ -572,7 +596,7 @@
           <td>{modifier.notes}</td>
         </tr>
       {/each}
-      {#each processDomainEffects($selectedDomain, $selectedEffects) as effect}
+      {#each processDomainEffects($selectedMode, $selectedDomain, $selectedEffects) as effect}
         <tr>
           <td class={effectClass(effect)}
             >{#if !effect.prerequisite || effect.prerequisite.length <= 0}
@@ -599,7 +623,7 @@
     <p>
       <strong>Number of Powers:</strong>
       {calcNumberOfPowers(
-        processDomainEffects($selectedDomain, $selectedEffects),
+        processDomainEffects($selectedMode, $selectedDomain, $selectedEffects),
         processDomainModifiers($selectedDomain, $selectedModifiers)
       )}
     </p>
