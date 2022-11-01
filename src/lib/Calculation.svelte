@@ -28,6 +28,8 @@
     sound,
     plague,
     madness,
+    help,
+    hinder,
   } from "../data/availableEffects.js";
   import { element, identity, xlink_attr } from "svelte/internal";
 
@@ -58,6 +60,10 @@
         return plague(truetier);
       case "madness":
         return madness(truetier);
+      case "help":
+        return help(truetier);
+      case "hinder":
+        return hinder(truetier);
     }
 
     console.log("modifier case not handled: ", modifier.amount);

@@ -79,6 +79,23 @@ export const geas = (tier) => {
   }
 }
 
+export const help = (tier) => {
+  let sum = 0;
+  for (let i = 1; i <= tier; i++) {
+    sum += i;
+  }
+  sum *= 2;
+  return sum;
+}
+
+export const hinder = (tier) => {
+  let sum = 0;
+  for (let i = 1; i <= tier; i++) {
+    sum += i;
+  }
+  return sum;
+}
+
 export const availableEffects = [
 
   { name: "Attack", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy"], modifierType: 'add', amount: 0, hasTiers: false, description: "takes an attack using the Caster's Magical Attack specialty that deals d10 DMG" },
@@ -168,26 +185,26 @@ export const availableEffects = [
   { name: "Silence", domains: ["Air", "Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "Dampens the volume of noises in an area, If used to hide or become silent, gives a disadvantage to listening for the target in an area [tier] meters cubed. Making a caster character silent means they can only use spells with the Stealth modifier or Cantrips until the silence ends" },
   { name: "Negate Magic", domains: ["Sorcery", "Necromancy"], modifierType: 'add', amount: 1, hasTiers: true, description: "Ends all lasting spells with less SP than [tier] in the target area. New spells cast for the next turn have [tier] number added to their spell difficulty" },
 
-  { name: "Help Strength Attribute", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to Strength" },
-  { name: "Help Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to STR-[notes]" },
-  { name: "Help Strength Speciality", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to STR-[notes]" },
-  { name: "Help Dexterity Attribute", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to Dexterity" },
-  { name: "Help Dexterity Skill", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to DEX-[notes]" },
-  { name: "Help Dexterity Speciality", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to DEX-[notes]" },
-  { name: "Help Intelligence Attribute", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to Intelligence" },
-  { name: "Help Intelligence Skill", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to INT-[notes]" },
-  { name: "Help Intelligence Speciality", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to INT-[notes]" },
-  { name: "Help Empathy Attribute", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 4, hasTiers: true, description: "Add [tier] points to Empathy" },
-  { name: "Help Empathy Skill", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "Add [tier] points to EMP-[notes]" },
-  { name: "Help Empathy Speciality", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Add [tier] points to EMP-[notes]" },
+  { name: "Help Strength Attribute", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add [tier] points to Strength" },
+  { name: "Help Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]} points to STR-[notes]" },
+  { name: "Help Strength Speciality", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*3} points to STR-[notes]" },
+  { name: "Help Dexterity Attribute", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add [tier] points to Dexterity" },
+  { name: "Help Dexterity Skill", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*2} points to DEX-[notes]" },
+  { name: "Help Dexterity Speciality", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*3} points to DEX-[notes]" },
+  { name: "Help Intelligence Attribute", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add [tier] points to Intelligence" },
+  { name: "Help Intelligence Skill", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*2} points to INT-[notes]" },
+  { name: "Help Intelligence Speciality", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {tier]*3} points to INT-[notes]" },
+  { name: "Help Empathy Attribute", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add [tier] points to Empathy" },
+  { name: "Help Empathy Skill", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*2} points to EMP-[notes]" },
+  { name: "Help Empathy Speciality", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*3} points to EMP-[notes]" },
 
-  { name: "Hinder Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier] points from Strength-[notes]" },
-  { name: "Hinder Strength Speciality", domains: ["Holy", "Necromancy", "Earth", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier*2] points from Strength-[notes]" },
-  { name: "Hinder Dexterity Skill", domains: ["Holy", "Necromancy", "Air", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier] points from Dexterity-[notes]" },
-  { name: "Hinder Dexterity Speciality", domains: ["Holy", "Necromancy", "Air", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier*2] points from Dexterity-[notes]" },
-  { name: "Hinder Intelligence Skill", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier] points from Intelligence-[notes]" },
-  { name: "Hinder Intelligence Speciality", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier*2] points from Intelligence-[notes]" },
-  { name: "Hinder Empathy Skill", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier] points from Empathy-[notes]" },
-  { name: "Hinder Empathy Speciality", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'add', amount: 1, hasTiers: true, description: "Subtract [tier*2] points from Empathy-[notes]" },
+  { name: "Hinder Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier] points from Strength-[notes]" },
+  { name: "Hinder Strength Speciality", domains: ["Holy", "Necromancy", "Earth", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier*2] points from Strength-[notes]" },
+  { name: "Hinder Dexterity Skill", domains: ["Holy", "Necromancy", "Air", "Illusion", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier] points from Dexterity-[notes]" },
+  { name: "Hinder Dexterity Speciality", domains: ["Holy", "Necromancy", "Air", "Illusion", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier*2] points from Dexterity-[notes]" },
+  { name: "Hinder Intelligence Skill", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier] points from Intelligence-[notes]" },
+  { name: "Hinder Intelligence Speciality", domains: ["Mind", "Necromancy", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier*2] points from Intelligence-[notes]" },
+  { name: "Hinder Empathy Skill", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier] points from Empathy-[notes]" },
+  { name: "Hinder Empathy Speciality", domains: ["Mind", "Holy", "Water", "Illusion", "Nature"], modifierType: 'function', amount: 'hinder', hasTiers: true, maxTier: 5, description: "Subtract [tier*2] points from Empathy-[notes]" },
 
 ]
