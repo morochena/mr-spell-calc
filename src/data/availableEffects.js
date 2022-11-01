@@ -152,6 +152,8 @@ export const availableEffects = [
   { name: "Divination", domains: ["Necromancy", "Sorcery"], modifierType: 'add', amount: 10, hasTiers: true, description: "gets to roll a die and use the result to replace any die they see rolled until the end of the spell" },
 
   { name: "Morph Form", domains: ["Necromancy", "Nature"], modifierType: 'add', amount: 7, hasTiers: false, description: "changes into an [notes] animal of the same size as the creature" },
+  { name: "Morph Form - Size", prerequisite: ["Morph Form"], domains: ["Necromancy", "Nature"], modifierType: 'add', amount: 2, hasTiers: true, description: "within [tier+1] size difference between the target and the animal" },
+  { name: "Morph Form - Gear", prerequisite: ["Morph Form"], domains: ["Necromancy", "Nature"], modifierType: 'add', amount: 4, hasTiers: false, description: "keeping all their stuff" },
 
   { name: "Read Mind", domains: ["Mind"], modifierType: 'add', amount: 3, hasTiers: true, maxTier: 4, description: "has their {thoughts([tier])} read if they are willing or have been reduced to 0 Mind, and lose 2 Mind if they resist" },
 
