@@ -12,7 +12,6 @@
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    console.log(session);
     if (session) {
       user.set(session.user);
     }

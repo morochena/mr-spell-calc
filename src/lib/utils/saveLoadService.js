@@ -1,34 +1,63 @@
 // @ts-nocheck
 
 import { get } from 'svelte/store';
+import * as effects from "../stores/selectedEffects.js";
 import * as meta from "../stores/selectedMeta.js";
 import * as modifiers from "../stores/selectedModifiers.js";
-import * as effects from "../stores/selectedEffects.js";
+import { supabase } from "../supabaseClient";
+import Toastify from 'toastify-js'
 
-export const saveSpell = () => {
-  const { name, description, selectedDomain, selectedMode } = meta;
+
+export const saveSpell = async () => {
+  const { name, description, selectedDomain, selectedMode, id } = meta;
   const { selectedModifiers } = modifiers;
   const { selectedEffects } = effects;
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const spell = {
+    id: get(id),
     name: get(name),
-    description: get(description),
-    domain: get(selectedDomain),
-    mode: get(selectedMode),
-    modifiers: get(selectedModifiers),
-    effects: get(selectedEffects)
+    user_id: user.id,
+    spell_data: {
+      description: get(description),
+      domain: get(selectedDomain),
+      mode: get(selectedMode),
+      modifiers: get(selectedModifiers),
+      effects: get(selectedEffects),
+    }
   };
 
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(spell));
-  const downloadAnchorNode = document.createElement('a');
-  downloadAnchorNode.setAttribute("href", dataStr);
-  downloadAnchorNode.setAttribute("download", get(name) + ".json");
-  document.body.appendChild(downloadAnchorNode);
-  downloadAnchorNode.click();
-  downloadAnchorNode.remove();
+  if (!spell.id || !name) {
+    return;
+  }
+
+
+  const { error } = await supabase.from("spells").upsert(spell);
+
+  if (!error) {
+    Toastify({
+      text: "Spell saved!",
+      duration: 3000
+    }).showToast();
+  }
 }
 
-export const loadSpell = () => {
+export const loadSpell = async (spell_id) => {
+  await supabase.auth.getUser();
+  const { data, error, status } = await supabase.from("spells").select(`*`).single().eq("id", spell_id);
+
+  if (data) {
+    const spell = data;
+    setSpell(spell);
+  }
+
+  if (error && status !== 406) throw error;
+}
+
+export const loadLocalSpell = () => {
   const uploadNode = document.createElement("input")
   uploadNode.setAttribute("type", "file");
   uploadNode.setAttribute("accept", "application/json");
@@ -42,7 +71,7 @@ export const loadSpell = () => {
       reader.addEventListener("load", e => {
         const data = reader.result
         const spell = JSON.parse(data);
-        setSpell(spell)
+        setLocalSpell(spell)
       });
 
       reader.readAsText(file)
@@ -53,6 +82,16 @@ export const loadSpell = () => {
 }
 
 const setSpell = (spell) => {
+  meta.name.set(spell.name);
+  meta.id.set(spell.id)
+  meta.description.set(spell.spell_data.description);
+  meta.selectedDomain.set(spell.spell_data.domain);
+  meta.selectedMode.set(spell.spell_data.mode);
+  modifiers.selectedModifiers.set(spell.spell_data.modifiers || []);
+  effects.selectedEffects.set(spell.spell_data.effects || []);
+}
+
+const setLocalSpell = (spell) => {
   meta.name.set(spell.name);
   meta.description.set(spell.description);
   meta.selectedDomain.set(spell.domain);

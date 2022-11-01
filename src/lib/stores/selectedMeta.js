@@ -8,3 +8,6 @@ export const selectedMode = persistedStore("selectedMode");
 export const SPCost = persistedStore("SPCost");
 export const isAlchemy = persistedStore("isAlchemy", false);
 export const isRunesmith = persistedStore("IsRunesmith", false);
+export const user_id = persistedStore("user_id");
+export const id = persistedStore("id");
+

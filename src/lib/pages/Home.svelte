@@ -1,9 +1,4 @@
 <script>
-  import Meta from "../components/Meta.svelte";
-  import Calculation from "../components/Calculation.svelte";
-  import Modifiers from "../components/Modifiers.svelte";
-  import Effects from "../components/Effects.svelte";
-  import logo from "../../assets/logo.png";
   import { Datatable } from "svelte-simple-datatables";
   import { supabase } from "../supabaseClient";
 

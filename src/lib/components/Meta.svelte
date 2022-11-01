@@ -1,7 +1,9 @@
 <script>
-  import { loadSpell, saveSpell } from "../utils/saveLoadService.js";
+  import { description, isAlchemy, isRunesmith, name, selectedDomain, selectedMode } from "../stores/selectedMeta.js";
+  import { supabase } from "../supabaseClient";
+  import { saveSpell, loadLocalSpell } from "../utils/saveLoadService.js";
 
-  import { name, description, selectedDomain, selectedMode, isAlchemy, isRunesmith } from "../stores/selectedMeta.js";
+  export let spell_id;
 
   let domains = [`Sorcery`, `Fire`, `Water`, `Earth`, `Air`, `Necromancy`, `Holy`, `Mind`, `Illusion`, `Nature`];
   let modes = [`Spell`, `Unpredicable`, `Stable`, `Imbue`];
@@ -11,12 +13,20 @@
   };
 
   const load = () => {
-    loadSpell();
+    loadLocalSpell();
   };
 
-  const reset = () => {
-    localStorage.clear();
-    window.location.reload();
+  const deleteSpell = async () => {
+    if (confirm("Are you sure?")) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { error } = await supabase.from("spells").delete().eq("id", spell_id);
+
+      if (!error) {
+        window.location.href = "/";
+      }
+    }
   };
 </script>
 
@@ -34,9 +44,9 @@
   >
 
   <button
-    on:click={reset}
+    on:click={deleteSpell}
     class="mt-2 mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 justify-self-end"
-    >Reset</button
+    >Delete</button
   >
 </div>
 

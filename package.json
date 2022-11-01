@@ -10,10 +10,11 @@
   },
   "devDependencies": {
     "@supabase/supabase-js": "^2.0.5",
-    "svelte-routing": "^1.6.0",
     "@sveltejs/vite-plugin-svelte": "^1.0.2",
     "svelte": "^3.49.0",
+    "svelte-routing": "^1.6.0",
+    "svelte-simple-datatables": "^0.2.3",
     "vite": "^3.1.0",
-    "svelte-simple-datatables": "^0.2.3"
+    "toastify-js": "^1.12.0"
   }
 }
