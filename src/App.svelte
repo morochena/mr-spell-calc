@@ -1,19 +1,45 @@
 <script>
-  import Meta from "./lib/Meta.svelte";
-  import Calculation from "./lib/Calculation.svelte";
-  import Modifiers from "./lib/Modifiers.svelte";
-  import Effects from "./lib/Effects.svelte";
+  import { user } from "./lib/stores/sessionStore";
+  import { supabase } from "./lib/supabaseClient";
+
+  import { Router, Link, Route } from "svelte-routing";
+  import Home from "./lib/pages/Home.svelte";
+  import Show from "./lib/pages/Show.svelte";
+  import Auth from "./lib/pages/Auth.svelte";
   import logo from "./assets/logo.png";
+
+  const setSession = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    console.log(session);
+    if (session) {
+      user.set(session.user);
+    }
+  };
+
+  supabase.auth.onAuthStateChange((_, session) => {
+    user.set(session.user);
+  });
+
+  let url = "";
+
+  setSession();
 </script>
 
 <main class="container mx-auto grid mt-4 mb-20 px-10">
-  <img src={logo} alt="Logo" class="object-cover h-48 w-96 place-self-center" />
-  <h1 class="text-3xl  place-self-center">Spell Calculator</h1>
-  <Meta />
-  <Modifiers />
-  <Effects />
-  <Calculation />
-</main>
+  <a href="/" class="place-self-center">
+    <img src={logo} alt="Logo" class="object-cover h-48 w-96 place-self-center" />
+  </a>
 
-<style>
-</style>
+  {#if $user}
+    <Router {url}>
+      <div>
+        <Route path="/"><Home /></Route>
+        <Route path="/spells/:id" let:params><Show id={params.id} /></Route>
+      </div>
+    </Router>
+  {:else}
+    <Auth />
+  {/if}
+</main>
