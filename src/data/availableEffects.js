@@ -96,6 +96,14 @@ export const hinder = (tier) => {
   return sum;
 }
 
+export const warplight = (tier) => {
+  return (tier - 1) * 4 + 2;
+}
+
+export const illusion = (tier) => {
+  return (tier - 1) * 6 + 3;
+}
+
 export const availableEffects = [
 
   { name: "Attack", domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy"], modifierType: 'add', amount: 0, hasTiers: false, description: "takes an attack using the Caster's Magical Attack specialty that deals d10 DMG" },
@@ -160,8 +168,9 @@ export const availableEffects = [
   { name: "End once Sensed", incompatible: ["Reset once Sensed"], prerequisite: ["Sense", "Lasting"], domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy", "Nature", "Mind"], modifierType: 'multiply', amount: .25, hasTiers: false, description: "Once sensed, the spell ends" },
   { name: "Reset once Sensed", incompatible: ["End once Sensed"], prerequisite: ["Sense", "Lasting"], domains: ["Sorcery", "Fire", "Water", "Air", "Earth", "Necromancy", "Holy", "Nature", "Mind"], modifierType: 'multiply', amount: .5, hasTiers: false, description: "Once sensed, the spell goes back to a holding state" },
 
-  { name: "Warp Light", domains: ["Air", "Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "hides something or causes it to glow, or reveal something visible elsewhere in range, in an area [tier] meters cubed. If used to hide or become invisible, gives a disavdantage to finding the target" },
-  { name: "Illusion", domains: ["Illusion"], modifierType: 'add', amount: 3, hasTiers: true, description: "create a ficticious image inside a bounding box of [tier] meters cubed" },
+  { name: "Warp Light", domains: ["Air", "Illusion"], modifierType: 'function', amount: 'warplight', hasTiers: true, description: "hides something or causes it to glow, or reveal something visible elsewhere in range. If used to hide or become invisible, gives a disavdantage to finding the target, gives [tier-1] advantage to anyone using it" },
+  { name: "Illusion", domains: ["Illusion"], modifierType: 'function', amount: 'illusion', hasTiers: true, description: "create a ficticious image,  gives [tier-1] advantage to anyone using it" },
+  { name: "Silence", domains: ["Air", "Illusion"], modifierType: 'function', amount: 'warplight', hasTiers: true, description: "Dampens the volume of noises up to {volume([tier])}, If used to hide or become silent, gives a [tier-1] advantage. Making a caster character silent means they can only use spells with the Stealth modifier or Cantrips until the silence ends" },
 
   { name: "Warp Space", domains: ["Sorcery"], modifierType: 'add', amount: 5, hasTiers: false, description: "connects two points within range with a portal" },
   { name: "Warp Weight", domains: ["Sorcery"], modifierType: 'add', amount: 4, hasTiers: true, description: "changes its weight by half or double [tier] times, which means it can be pushed as if it was lighter/heavier" },
@@ -182,7 +191,6 @@ export const availableEffects = [
   { name: "Sound (Subject Matter)", domains: ["Sorcery", "Illusion", "Mind"], modifierType: 'function', amount: 'sound', hasTiers: true, maxTier: 3, description: "creates sounds that {sound([tier])}" },
   { name: "Sound (Volume)", domains: ["Sorcery", "Illusion", "Mind"], modifierType: 'add', amount: 1, hasTiers: true, maxTier: 3, description: "at a volume of {volume([tier])}" },
 
-  { name: "Silence", domains: ["Air", "Illusion"], modifierType: 'add', amount: 2, hasTiers: true, description: "Dampens the volume of noises in an area, If used to hide or become silent, gives a disadvantage to listening for the target in an area [tier] meters cubed. Making a caster character silent means they can only use spells with the Stealth modifier or Cantrips until the silence ends" },
   { name: "Negate Magic", domains: ["Sorcery", "Necromancy"], modifierType: 'add', amount: 1, hasTiers: true, description: "Ends all lasting spells with less SP than [tier] in the target area. New spells cast for the next turn have [tier] number added to their spell difficulty" },
 
   { name: "Help Strength Attribute", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add [tier] points to Strength" },

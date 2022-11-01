@@ -30,6 +30,8 @@
     madness,
     help,
     hinder,
+    illusion,
+    warplight,
   } from "../data/availableEffects.js";
   import { element, identity, xlink_attr } from "svelte/internal";
 
@@ -64,6 +66,10 @@
         return help(truetier);
       case "hinder":
         return hinder(truetier);
+      case "illusion":
+        return illusion(truetier);
+      case "warplight":
+        return warplight(truetier);
     }
 
     console.log("modifier case not handled: ", modifier.amount);
