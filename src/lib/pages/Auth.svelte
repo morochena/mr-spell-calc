@@ -11,7 +11,7 @@
         email,
         options: {
           emailRedirectTo:
-            import.meta.env.MODE == "production" ? "https://mr-creature-gen.pages.dev" : "http://localhost:5173",
+            import.meta.env.MODE == "production" ? "https://mr-spell-calc.pages.dev" : "http://localhost:5173",
         },
       });
       if (error) throw error;
@@ -30,7 +30,7 @@
         provider: "discord",
         options: {
           redirectTo:
-            import.meta.env.MODE == "production" ? "https://mr-creature-gen.pages.dev" : "http://localhost:5173",
+            import.meta.env.MODE == "production" ? "https://mr-spell-calc.pages.dev" : "http://localhost:5173",
         },
       });
       if (error) throw error;
