@@ -21,18 +21,7 @@
 
   import { get } from "svelte/store";
 
-  import {
-    createElement,
-    movementCondition,
-    geas,
-    sound,
-    plague,
-    madness,
-    help,
-    hinder,
-    illusion,
-    warplight,
-  } from "../data/availableEffects.js";
+  import { createElement, movementCondition, geas, sound, plague, madness } from "../data/availableEffects.js";
   import { element, identity, xlink_attr } from "svelte/internal";
 
   const runModifier = (modifier) => {
@@ -62,14 +51,6 @@
         return plague(truetier);
       case "madness":
         return madness(truetier);
-      case "help":
-        return help(truetier);
-      case "hinder":
-        return hinder(truetier);
-      case "illusion":
-        return illusion(truetier);
-      case "warplight":
-        return warplight(truetier);
     }
 
     console.log("modifier case not handled: ", modifier.amount);
@@ -109,9 +90,7 @@
     const modList = get(selectedModifiers);
     let val = 1;
 
-    let subModList = modList.filter(
-      (mod) => mod.name !== "Exhausting" && mod.name !== "Uncomplicated"
-    );
+    let subModList = modList.filter((mod) => mod.name !== "Exhausting" && mod.name !== "Uncomplicated");
 
     const effectList = get(selectedEffects);
     const effectAndsubModifierValues = subModList.concat(effectList);
@@ -417,11 +396,7 @@
       return total + resolveCost(modifier);
     }, 0);
 
-    if (get(selectedDomain) === "Illusion")
-      modifierCost -= calcIllusionDiscount(
-        modifierCost,
-        effectAndModifierValues
-      );
+    if (get(selectedDomain) === "Illusion") modifierCost -= calcIllusionDiscount(modifierCost, effectAndModifierValues);
 
     if (sMode === "Unpredicable") {
       modifierCost += 4;
@@ -432,9 +407,7 @@
     let paramSPCost = modifierCost;
 
     let spMultipliers = effectAndModifierValues.filter(
-      (modifier) =>
-        modifier.modifierType === "multiply" ||
-        modifier.modifierType === "functionMultiply"
+      (modifier) => modifier.modifierType === "multiply" || modifier.modifierType === "functionMultiply"
     );
 
     spMultipliers.forEach((modifier) => {
@@ -473,9 +446,7 @@
   }
 
   function calculateSPCost() {
-    const effectAndModifierValues = selectedEffectValues.concat(
-      selectedModifierValues
-    );
+    const effectAndModifierValues = selectedEffectValues.concat(selectedModifierValues);
     totalSPCost = calculateSPCostParam(effectAndModifierValues);
     $SPCost = totalSPCost;
   }
@@ -529,9 +500,7 @@
       case "functionMultiply":
         const amountM = runModifier(modifier)[0];
         const operatorM = amountM > 0 ? "+" : "";
-        return `x${runModifier(modifier)[1]} and ${operatorM}${
-          runModifier(modifier)[0]
-        }`;
+        return `x${runModifier(modifier)[1]} and ${operatorM}${runModifier(modifier)[0]}`;
     }
   };
 
@@ -548,9 +517,7 @@
 
 <div class="mt-10">
   <h2 class="text-xl">Summary</h2>
-  <div
-    class="mt-2 bg-gray-700 rounded-lg py-5 px-6 mb-4 text-sm text-white mb-3"
-  >
+  <div class="mt-2 bg-gray-700 rounded-lg py-5 px-6 mb-4 text-sm text-white mb-3">
     <div>
       <p><strong>Name:</strong> {$name}</p>
       <p><strong>Description:</strong> {$description}</p>
@@ -575,23 +542,11 @@
   <table class="mt-2 min-w-full divide-y divide-gray-300">
     <thead class="bg-gray-50">
       <tr>
-        <th
-          scope="col"
-          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-          >Name</th
-        >
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-          >Cost</th
-        >
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-          >Tier</th
-        >
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-          >Description</th
-        >
-        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-          >Notes</th
-        >
+        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Cost</th>
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tier</th>
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Notes</th>
       </tr>
     </thead>
     <tbody>
