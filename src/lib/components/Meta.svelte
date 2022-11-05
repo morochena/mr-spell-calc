@@ -1,5 +1,13 @@
 <script>
-  import { description, isAlchemy, isRunesmith, name, selectedDomain, selectedMode } from "../stores/selectedMeta.js";
+  import {
+    description,
+    isAlchemy,
+    isRunesmith,
+    name,
+    selectedDomain,
+    selectedMode,
+    isPublic,
+  } from "../stores/selectedMeta.js";
   import { supabase } from "../supabaseClient";
   import { saveSpell, loadLocalSpell } from "../utils/saveLoadService.js";
 
@@ -48,6 +56,12 @@
     class="mt-2 mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 justify-self-end"
     >Delete</button
   >
+  <fieldset class="form-group margin-top-large">
+    <label for="isPublic" class="paper-check">
+      <input type="checkbox" name="paperChecks" id="isPublic" bind:checked={$isPublic} />
+      <span>Public link (read-only)</span>
+    </label>
+  </fieldset>
 </div>
 
 <div class="w-96">

@@ -18,6 +18,7 @@
       supabase
         .from("spells")
         .select(`id, inserted_at, name`)
+        .eq("user_id", user.id)
         .order("inserted_at", { ascending: false })
         .then(({ data, error, status }) => {
           if (data) {

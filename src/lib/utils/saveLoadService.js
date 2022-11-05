@@ -9,7 +9,7 @@ import Toastify from 'toastify-js'
 
 
 export const saveSpell = async () => {
-  const { name, description, selectedDomain, selectedMode, id } = meta;
+  const { name, description, selectedDomain, selectedMode, id, isPublic } = meta;
   const { selectedModifiers } = modifiers;
   const { selectedEffects } = effects;
 
@@ -17,10 +17,13 @@ export const saveSpell = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
+  console.log(get(isPublic))
+
   const spell = {
     id: get(id),
     name: get(name),
     user_id: user.id,
+    is_public: get(isPublic),
     spell_data: {
       description: get(description),
       domain: get(selectedDomain),
@@ -82,6 +85,7 @@ export const loadLocalSpell = () => {
 }
 
 const setSpell = (spell) => {
+  meta.isPublic.set(spell.is_public);
   meta.name.set(spell.name);
   meta.id.set(spell.id)
   meta.description.set(spell.spell_data.description);
