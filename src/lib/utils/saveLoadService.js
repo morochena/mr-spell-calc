@@ -17,8 +17,6 @@ export const saveSpell = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(get(isPublic))
-
   const spell = {
     id: get(id),
     name: get(name),
