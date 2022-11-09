@@ -10,4 +10,4 @@ export const isAlchemy = persistedStore("isAlchemy", false);
 export const isRunesmith = persistedStore("IsRunesmith", false);
 export const user_id = persistedStore("user_id");
 export const id = persistedStore("id");
-
+export const isPublic = persistedStore("isPublic", false)
