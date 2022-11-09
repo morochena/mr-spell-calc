@@ -33,10 +33,11 @@ export const movementCondition = (tier) => {
 export const sound = (tier) => {
   switch (tier) {
     case 1:
-      return 3;
+      return 2;
     case 2:
-      return 7;
+      return 3;
     case 3:
+      return 7;
     default:
       return 12;
   }
@@ -190,13 +191,13 @@ export const availableEffects = [
   { name: "Light", domains: ["Holy", "Fire", "Necromancy", "Sorcery", "Illusion"], modifierType: 'add', amount: 1, hasTiers: true, description: "illuminates {light([tier])}" },
   { name: "Noise", domains: ["Holy", "Fire", "Necromancy", "Sorcery", "Illusion", "Nature", "Air", "Water", "Earth"], modifierType: 'add', amount: 1, hasTiers: true, description: "causes noise {noise([tier])}" },
 
-  { name: "Sound (Subject Matter)", domains: ["Sorcery", "Illusion", "Mind"], modifierType: 'function', amount: 'sound', hasTiers: true, maxTier: 3, description: "creates sounds that {sound([tier])}" },
-  { name: "Sound (Volume)", domains: ["Sorcery", "Illusion", "Mind"], modifierType: 'add', amount: 1, hasTiers: true, maxTier: 3, description: "at a volume of {volume([tier])}" },
+  { name: "Sound (Subject Matter)", domains: ["Sorcery", "Illusion", "Mind"], modifierType: 'add', amount: 1, hasTiers: true, maxTier: 3, description: "creates sounds that {sound([tier])}" },
+  { name: "Sound (Volume)", domains: ["Sorcery", "Illusion", "Mind"], modifierType: 'function', amount: 'sound', hasTiers: true, maxTier: 3, description: "at a volume of {volume([tier])}" },
 
   { name: "Negate Magic", domains: ["Sorcery", "Necromancy"], modifierType: 'add', amount: 1, hasTiers: true, description: "Ends all lasting spells with less SP than [tier] in the target area. New spells cast for the next turn have [tier] number added to their spell difficulty" },
 
   { name: "Help Strength Attribute", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add [tier] points to Strength" },
-  { name: "Help Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]} points to STR-[notes]" },
+  { name: "Help Strength Skill", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*2} points to STR-[notes]" },
   { name: "Help Strength Speciality", domains: ["Holy", "Necromancy", "Earth", "Air", "Nature"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*3} points to STR-[notes]" },
   { name: "Help Dexterity Attribute", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add [tier] points to Dexterity" },
   { name: "Help Dexterity Skill", domains: ["Holy", "Necromancy", "Air", "Illusion"], modifierType: 'function', amount: 'help', hasTiers: true, maxTier: 5, description: "Add {[tier]*2} points to DEX-[notes]" },
