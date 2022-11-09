@@ -376,6 +376,7 @@
   }
 
   function calcIllusionDiscount(total, effects) {
+    //effects = effects.filter((x) => x.);
     let help = effects.filter((x) => x.name.includes("Help"));
     let helpSP = 0;
     help.forEach((element) => {
@@ -414,15 +415,12 @@
 
     totalSPMults = 1;
 
-    let modifierCost = effectAndModifierValues.reduce((total, modifier) => {
+    let modifierCost = selectedEffectValues.reduce((total, modifier) => {
       return total + resolveCost(modifier);
     }, 0);
 
     if (get(selectedDomain) === "Illusion")
-      modifierCost -= calcIllusionDiscount(
-        modifierCost,
-        effectAndModifierValues
-      );
+      modifierCost -= calcIllusionDiscount(modifierCost, selectedEffectValues);
 
     if (sMode === "Unpredicable") {
       modifierCost += 4;
@@ -484,7 +482,7 @@
   function craftedSpellPreamble(isAlchemyValue, isRunesmithValue, spellCost) {
     const modList = get(selectedModifiers);
     let hours = spellCost;
-    let days = 1;
+    let days = 2;
     const alclist = modList.filter((mod) => mod.name.includes("brewing"));
     const runelist = modList.filter((mod) => mod.name.includes("crafting"));
     if (alclist.length > 0) {
@@ -500,13 +498,11 @@
         " hours actively. Thereafter they can be used by anyone."
       );
     if (isRunesmithValue) {
-      hours = hours * 2;
+      hours = days * hours;
       return (
         "This is an magical rune that takes " +
-        days +
-        " days to craft which includes " +
         hours +
-        " in hours of intense labor per day. Thereafter they can be used by anyone."
+        " in hours of intense labor to craft. Thereafter they can be used by anyone."
       );
     }
     return "";
