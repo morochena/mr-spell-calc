@@ -133,7 +133,7 @@ export const availableModifiers = [
   { name: "Magical Rune Permanent (Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: false, modifierType: 'add', amount: 20, description: "never loses charge" },
   { name: "Magical Rune Small(Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: false, modifierType: 'add', amount: 5, description: "is a small rune" },
   { name: "Magical Rune Expendable (Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: false, modifierType: 'reduce', amount: 3, description: "the rune is consumed" },
-  { name: "Runesmith crafting (Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: true, modifierType: 'reduce', amount: 2, description: "takes [tier+1] days to craft" },
+  { name: "Runesmith crafting (Runesmith only)", prerequisite: ["Magical Runes (Runesmith only; Required for Runes)"], hasTiers: true, modifierType: 'reduce', amount: 2, maxTier: 5, description: "takes [(tier+2)*cost] hours to craft" },
   { name: "Alchemy (Alchemist only; Required for Alchemy)", incompatible: ["Somatic"], prerequisite: ["Alchemist"], hasTiers: false, modifierType: 'add', amount: 3, description: "is an alchemical item" },
   { name: "Alchemy brewing (Alchemist only)", prerequisite: ["Alchemy (Alchemist only; Required for Alchemy)"], hasTiers: true, modifierType: 'reduce', amount: 1, description: "takes [tier+cost] hours to craft" },
   { name: "Elongated Shelf Life (Alchemist only)", prerequisite: ["Alchemy (Alchemist only; Required for Alchemy)"], hasTiers: false, modifierType: 'add', amount: 2, description: "keeps for [tier+1] months" },
