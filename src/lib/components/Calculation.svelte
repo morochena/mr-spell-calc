@@ -376,6 +376,7 @@
   }
 
   function calcIllusionDiscount(total, effects) {
+    //effects = effects.filter((x) => x.);
     let help = effects.filter((x) => x.name.includes("Help"));
     let helpSP = 0;
     help.forEach((element) => {
@@ -414,15 +415,12 @@
 
     totalSPMults = 1;
 
-    let modifierCost = effectAndModifierValues.reduce((total, modifier) => {
+    let modifierCost = selectedEffectValues.reduce((total, modifier) => {
       return total + resolveCost(modifier);
     }, 0);
 
     if (get(selectedDomain) === "Illusion")
-      modifierCost -= calcIllusionDiscount(
-        modifierCost,
-        effectAndModifierValues
-      );
+      modifierCost -= calcIllusionDiscount(modifierCost, selectedEffectValues);
 
     if (sMode === "Unpredicable") {
       modifierCost += 4;
