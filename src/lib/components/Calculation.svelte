@@ -415,7 +415,7 @@
 
     totalSPMults = 1;
 
-    let modifierCost = selectedEffectValues.reduce((total, modifier) => {
+    let modifierCost = effectAndModifierValues.reduce((total, modifier) => {
       return total + resolveCost(modifier);
     }, 0);
 
