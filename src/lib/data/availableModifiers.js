@@ -65,7 +65,7 @@ export const lastingModifier = (tier, type = null) => {
     cost += 5
     baseCost = 5
     multiplier = 5
-  } else if (type == 'Lasting (Hours)') {
+  } else if (type == 'Lasting (Weeks)') {
     cost += 8
     baseCost = 6
     multiplier = 8
