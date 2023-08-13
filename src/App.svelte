@@ -28,8 +28,17 @@
 
 <main class="container mx-auto grid mt-4 mb-20 px-10">
   <a href="/" class="place-self-center">
-    <img src={logo} alt="Logo" class="object-cover h-48 w-96 place-self-center" />
+    <img
+      src={logo}
+      alt="Logo"
+      class="object-cover h-48 w-96 place-self-center"
+    />
   </a>
+
+  <p class="text-red-500">
+    Note: This version of the app is <strong>deprecated</strong>. Please go to
+    the new app: <a href="https://mr-calc.pages.dev">Here</a>.
+  </p>
 
   {#if $user}
     <Router {url}>
