@@ -35,10 +35,12 @@
     />
   </a>
 
-  <p class="text-red-500">
-    Note: This version of the app is <strong>deprecated</strong>. Please go to
-    the new app: <a href="https://mr-calc.pages.dev">Here</a>.
-  </p>
+  <div class="flex w-full flex-col items-center justify-center my-8">
+    <p class="text-red-500 text-center">
+      Note: This version of the app is <strong>deprecated</strong>. Please go to
+      the new app: <a href="https://mr-calc.pages.dev">Here</a>.
+    </p>
+  </div>
 
   {#if $user}
     <Router {url}>
